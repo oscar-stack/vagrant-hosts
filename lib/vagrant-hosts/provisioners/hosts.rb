@@ -59,13 +59,7 @@ class VagrantHosts::Provisioner < Vagrant::Provisioners::Base
       cache.flush
 
       @env[:vm].channel.upload(cache.path, '/tmp/hosts')
-      @env[:vm].channel.sudo('mv /tmp/hosts /etc/hosts') do |type, data|
-        # This section is directly ripped off from the shell provider.
-        if [:stderr, :stdout].include?(type)
-          color = type == :stdout ? :green : :red
-          @env[:ui].info(data.chomp, :color => color, :prefix => false)
-        end
-      end
+      @env[:vm].channel.sudo('mv /tmp/hosts /etc/hosts')
     end
 
     def hosts_format
