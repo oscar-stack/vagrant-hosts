@@ -59,13 +59,12 @@ class VagrantHosts::Provisioner < Vagrant::Provisioners::Base
       cache.flush
 
       @env[:vm].channel.upload(cache.path, '/tmp/hosts')
-      @env[:vm].channel.sudo('mv /tmp/hosts /etc/hosts')
+      @env[:vm].channel.sudo('install -m 644 /tmp/hosts /etc/hosts')
     end
 
     def hosts_format
       @config.hosts.inject('') do |str, (address, aliases)|
         str << "#{address} #{aliases.join(' ')}\n"
-        str
       end
     end
   end
