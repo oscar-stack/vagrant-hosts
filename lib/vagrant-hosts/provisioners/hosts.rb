@@ -50,7 +50,7 @@ class VagrantHosts::Provisioner < Vagrant::Provisioners::Base
       cache = Tempfile.new('vagrant-hosts')
 
       # It would be really cool to synchronize this file instead of blindly
-      # smashing the remove hosts file, but this is the quick and dirty solution.
+      # smashing the remote hosts file, but this is the quick and dirty solution.
       #@env[:vm].channel.download('/etc/hosts', cache.path)
       #cache.rewind
       #cache.truncate(0)
