@@ -14,12 +14,15 @@ class VagrantHosts::Provisioner < Vagrant::Provisioners::Base
       @hosts = []
     end
 
+    # Register a host for entry
+    #
+    # @param [String] address The IP address for aliases
+    # @param [Array] aliases An array of hostnames to assign to the IP address
     def add_host(address, aliases)
       @hosts << [address, aliases]
     end
 
     def validate(env, errors)
-
       @hosts.each do |(address, aliases)|
         unless aliases.is_a? Array
           errors.add("#{address} should have an array of aliases, got #{aliases.inspect}:#{aliases.class}")
@@ -62,6 +65,9 @@ class VagrantHosts::Provisioner < Vagrant::Provisioners::Base
       @env[:vm].channel.sudo('install -m 644 /tmp/hosts /etc/hosts')
     end
 
+    # Generates content appropriate for a linux hosts file
+    #
+    # @return [String] All hosts in the config joined into hosts records
     def hosts_format
       @config.hosts.inject('') do |str, (address, aliases)|
         str << "#{address} #{aliases.join(' ')}\n"
