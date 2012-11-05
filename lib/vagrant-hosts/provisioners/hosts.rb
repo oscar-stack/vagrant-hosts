@@ -1,8 +1,8 @@
 require 'vagrant'
+require 'vagrant-hosts'
 require 'vagrant-hosts/ssh' # Guerrilla patch ssh download
 require 'tempfile'
 
-module VagrantHosts; end
 
 class VagrantHosts::Provisioner < Vagrant::Provisioners::Base
 
