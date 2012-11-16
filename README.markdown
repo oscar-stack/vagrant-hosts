@@ -24,6 +24,12 @@ Synopsis
       end
     end
 
+Supported Guest Platforms
+-------------------------
+
+  * Linux
+  * (soon) Windows (As soon as I get a chance to incorporate the driver)
+
 Installation
 ------------
 
