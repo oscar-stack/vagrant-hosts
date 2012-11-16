@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.authors  = 'Adrien Thebo'
   gem.email    = 'adrien@somethingsinistral.net'
   gem.homepage = 'https://github.com/adrienthebo/vagrant-hosts'
+  gem.has_rdoc = true
 
   gem.add_dependency 'vagrant', '~> 1.0'
 
