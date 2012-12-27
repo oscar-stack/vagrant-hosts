@@ -1,3 +1,3 @@
 module VagrantHosts
-  VERSION = '0.0.1rc1'
+  VERSION = '0.0.1'
 end
