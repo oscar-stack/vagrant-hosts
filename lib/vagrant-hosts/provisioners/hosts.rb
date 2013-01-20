@@ -1,46 +1,14 @@
 require 'vagrant'
 require 'vagrant-hosts'
 require 'vagrant-hosts/ssh' # Guerrilla patch ssh download
+require 'vagrant-hosts/config'
 require 'tempfile'
 
 
 class VagrantHosts::Provisioner < Vagrant::Provisioners::Base
 
-  class Config < Vagrant::Config::Base
-
-    attr_reader :hosts
-
-    def initialize
-      @hosts = []
-    end
-
-    # Register a host for entry
-    #
-    # @param [String] address The IP address for aliases
-    # @param [Array] aliases An array of hostnames to assign to the IP address
-    def add_host(address, aliases)
-      @hosts << [address, aliases]
-    end
-
-    def add_ipv6_multicast
-      add_host '::1',     ['ip6-localhost', 'ip6-loopback']
-      add_host 'fe00::0', ['ip6-localnet']
-      add_host 'ff00::0', ['ip6-mcastprefix']
-      add_host 'ff02::1', ['ip6-allnodes']
-      add_host 'ff02::2', ['ip6-allrouters']
-    end
-
-    def validate(env, errors)
-      @hosts.each do |(address, aliases)|
-        unless aliases.is_a? Array
-          errors.add("#{address} should have an array of aliases, got #{aliases.inspect}:#{aliases.class}")
-        end
-      end
-    end
-  end
-
   def self.config_class
-    Config
+    ::VagrantHosts::Config
   end
 
   def provision!
@@ -58,25 +26,36 @@ class VagrantHosts::Provisioner < Vagrant::Provisioners::Base
     end
 
     def sync!
-      cache = Tempfile.new('vagrant-hosts')
+      upload_tmphosts
+      atomic_sync
+    end
 
-      # It would be really cool to synchronize this file instead of blindly
-      # smashing the remote hosts file, but this is the quick and dirty solution.
-      #@env[:vm].channel.download('/etc/hosts', cache.path)
-      #cache.rewind
-      #cache.truncate(0)
-
-      cache.write hosts_format
+    def upload_tmphosts
+      cache = Tempfile.new('tmp-hosts')
+      cache.write(format_hosts)
       cache.flush
-
       @env[:vm].channel.upload(cache.path, '/tmp/hosts')
-      @env[:vm].channel.sudo('install -m 644 /tmp/hosts /etc/hosts')
+    end
+
+    def atomic_sync
+      script = <<-ATOMIC
+hostname #{@env[:vm].name}
+domainname vagrantup.internal
+install -m 644 /tmp/hosts /etc/hosts
+      ATOMIC
+
+      sync = Tempfile.new('sync')
+      sync.write(script)
+      sync.flush
+      @env[:vm].channel.upload(sync.path, '/tmp/sync')
+
+      @env[:vm].channel.sudo('bash /tmp/sync')
     end
 
     # Generates content appropriate for a linux hosts file
     #
     # @return [String] All hosts in the config joined into hosts records
-    def hosts_format
+    def format_hosts
       @config.hosts.inject('') do |str, (address, aliases)|
         str << "#{address} #{aliases.join(' ')}\n"
       end
