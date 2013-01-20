@@ -22,6 +22,14 @@ class VagrantHosts::Provisioner < Vagrant::Provisioners::Base
       @hosts << [address, aliases]
     end
 
+    def add_ipv6_multicast
+      add_host '::1',     ['ip6-localhost', 'ip6-loopback']
+      add_host 'fe00::0', ['ip6-localnet']
+      add_host 'ff00::0', ['ip6-mcastprefix']
+      add_host 'ff02::1', ['ip6-allnodes']
+      add_host 'ff02::2', ['ip6-allrouters']
+    end
+
     def validate(env, errors)
       @hosts.each do |(address, aliases)|
         unless aliases.is_a? Array
