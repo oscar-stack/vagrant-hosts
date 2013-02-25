@@ -6,7 +6,9 @@ class VagrantHosts::Config < Vagrant::Config::Base
   attr_reader :hosts
 
   def initialize
+    super
     @hosts = []
+    @set_localhost = false
   end
 
   # Register a host for entry
@@ -23,6 +25,28 @@ class VagrantHosts::Config < Vagrant::Config::Base
     add_host 'ff00::0', ['ip6-mcastprefix']
     add_host 'ff02::1', ['ip6-allnodes']
     add_host 'ff02::2', ['ip6-allrouters']
+  end
+
+
+  def add_localhost
+    @set_localhost = true
+  end
+
+  # Print out a list of all host entries with respect to the current env
+  #
+  # This varies from the straight #hosts call because it handles localhost,
+  # which has to be evaluated with respect to a given environment
+  #
+  # @param [Hash] env The current environment
+  #
+  # @return [Array<String, Array<String>>] Pairs of IP addresses and their aliases
+  def all_hosts(env)
+    if @set_localhost
+      add_host '127.0.0.1', ['localhost']
+      add_host '127.0.1.1', [env[:vm].name]
+    end
+
+    @hosts
   end
 
   def validate(env, errors)
