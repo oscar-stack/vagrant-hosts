@@ -2,6 +2,4 @@
 module VagrantHosts; end
 
 require 'vagrant-hosts/version'
-require 'vagrant-hosts/provisioners/hosts'
-
-Vagrant.provisioners.register(:hosts) { VagrantHosts::Provisioner }
+require 'vagrant-hosts/plugin'

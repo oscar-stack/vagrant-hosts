@@ -1,14 +1,14 @@
 require 'vagrant'
-require 'vagrant-hosts'
 
-class VagrantHosts::Config < Vagrant::Config::Base
+module VagrantHosts
+class Config < Vagrant.plugin('2', :config)
 
+  # @!attribute hosts
+  #   @return [Array<Array<String, Array<String>>>] A list of IP addresses and their aliases
   attr_reader :hosts
 
   def initialize
-    super
     @hosts = []
-    @set_localhost = false
   end
 
   # Register a host for entry
@@ -27,9 +27,16 @@ class VagrantHosts::Config < Vagrant::Config::Base
     add_host 'ff02::2', ['ip6-allrouters']
   end
 
-
   def add_localhost
     @set_localhost = true
+  end
+
+  # @param other [VagrantHosts::Config]
+  # @return [VagrantHosts::Config] The merged results
+  def merge(other)
+    super.tap do |result|
+      result.hosts += other.hosts
+    end
   end
 
   # Print out a list of all host entries with respect to the current env
@@ -49,11 +56,15 @@ class VagrantHosts::Config < Vagrant::Config::Base
     @hosts
   end
 
-  def validate(env, errors)
+  def validate(machine)
+    errors = []
     @hosts.each do |(address, aliases)|
       unless aliases.is_a? Array
-        errors.add("#{address} should have an array of aliases, got #{aliases.inspect}:#{aliases.class}")
+        errors << "#{address} should have an array of aliases, got #{aliases.inspect}:#{aliases.class}"
       end
     end
+
+    {"Vagrant Hosts" => errors}
   end
+end
 end
