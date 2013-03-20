@@ -27,33 +27,12 @@ class Config < Vagrant.plugin('2', :config)
     add_host 'ff02::2', ['ip6-allrouters']
   end
 
-  def add_localhost
-    @set_localhost = true
-  end
-
   # @param other [VagrantHosts::Config]
   # @return [VagrantHosts::Config] The merged results
   def merge(other)
     super.tap do |result|
       result.hosts += other.hosts
     end
-  end
-
-  # Print out a list of all host entries with respect to the current env
-  #
-  # This varies from the straight #hosts call because it handles localhost,
-  # which has to be evaluated with respect to a given environment
-  #
-  # @param [Hash] env The current environment
-  #
-  # @return [Array<String, Array<String>>] Pairs of IP addresses and their aliases
-  def all_hosts(env)
-    if @set_localhost
-      add_host '127.0.0.1', ['localhost']
-      add_host '127.0.1.1', [env[:vm].name]
-    end
-
-    @hosts
   end
 
   def validate(machine)
