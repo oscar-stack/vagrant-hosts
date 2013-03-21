@@ -6,7 +6,8 @@ Manage vagrant guest local DNS resolution.
 Synopsis
 --------
 
-    Vagrant::Config.run do |config|
+    # Manually configure addresses
+    Vagrant.configure('2') do |config|
       config.vm.box = "ubuntu-12.04-server-i386"
 
       config.vm.provision :hosts do |provisioner|
@@ -21,6 +22,26 @@ Synopsis
           'mypuppetmaster',
           'puppet'
         ]
+      end
+    end
+
+- - -
+
+    # Autoconfigure hosts. This will copy the private network addresses from
+    # each VM and update hosts entries on all other machines. No further
+    # configuration is needed.
+    Vagrant.configure('2') do |config|
+
+      config.vm.define :first do |node|
+        node.vm.box = "ubuntu-12.04-server-i386"
+        node.vm.network :private_network, :ip => '10.20.1.2'
+        node.vm.provision :hosts
+      end
+
+      config.vm.define :second do |node|
+        node.vm.box = "ubuntu-12.04-server-i386"
+        node.vm.network :private_network, :ip => '10.20.1.3'
+        node.vm.provision :hosts
       end
     end
 
