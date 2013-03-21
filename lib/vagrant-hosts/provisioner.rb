@@ -55,14 +55,44 @@ install -m 644 /tmp/hosts /etc/hosts
     #
     # @return [String] All hosts in the config joined into hosts records
     def format_hosts
-      all_hosts = @config.hosts
-      all_hosts.unshift(['127.0.0.1', ['localhost']])
-      all_hosts.unshift(['127.0.1.1', [@machine.name]])
-
-
       all_hosts.inject('') do |str, (address, aliases)|
         str << "#{address} #{aliases.join(' ')}\n"
       end
+    end
+
+    private
+    def all_hosts
+      all_hosts = []
+
+      if @config.autoconfigure
+        all_hosts += vagrant_hosts
+      else
+        all_hosts += @config.hosts
+      end
+
+      all_hosts.unshift(['127.0.0.1', ['localhost']])
+      all_hosts.unshift(['127.0.1.1', [@machine.name]])
+    end
+
+    def vagrant_hosts
+      hosts = []
+      env = @machine.env
+      names = env.machine_names
+
+      # Assume that all VMs are using the current provider
+      provider = @machine.provider
+
+      names.each do |name|
+        network_settings = env.machine(name, :virtualbox).config.vm.networks
+        network_settings.each do |entry|
+          if entry[0] == :private_network
+            ipaddr = entry[1][:ip]
+            hosts << [ipaddr, [name]]
+          end
+        end
+      end
+
+      hosts
     end
   end
 end

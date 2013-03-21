@@ -7,8 +7,14 @@ class Config < Vagrant.plugin('2', :config)
   #   @return [Array<Array<String, Array<String>>>] A list of IP addresses and their aliases
   attr_reader :hosts
 
+  # @!attribute autoconfigure
+  #   @return [TrueClass, FalseClass] If hosts should be generated from the
+  #                                   other vagrant machines
+  attr_accessor :autoconfigure
+
   def initialize
     @hosts = []
+    @autoconfigure = UNSET_VALUE
   end
 
   # Register a host for entry
@@ -19,12 +25,19 @@ class Config < Vagrant.plugin('2', :config)
     @hosts << [address, aliases]
   end
 
+  # All IPv6 multicast addresses
   def add_ipv6_multicast
     add_host '::1',     ['ip6-localhost', 'ip6-loopback']
     add_host 'fe00::0', ['ip6-localnet']
     add_host 'ff00::0', ['ip6-mcastprefix']
     add_host 'ff02::1', ['ip6-allnodes']
     add_host 'ff02::2', ['ip6-allrouters']
+  end
+
+  def finalize!
+    if @autoconfigure == UNSET_VALUE or @hosts.empty?
+      @autoconfigure = true
+    end
   end
 
   # @param other [VagrantHosts::Config]
