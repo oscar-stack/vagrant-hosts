@@ -26,8 +26,10 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
 
     def sync!
       upload_tmphosts
-      atomic_sync
+      update_hosts
     end
+
+    private
 
     def upload_tmphosts
       cache = Tempfile.new('tmp-hosts')
@@ -36,19 +38,9 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
       @machine.communicate.upload(cache.path, '/tmp/hosts')
     end
 
-    def atomic_sync
-      script = <<-ATOMIC
-hostname #{@machine.name}
-domainname vagrantup.internal
-install -m 644 /tmp/hosts /etc/hosts
-      ATOMIC
-
-      sync = Tempfile.new('sync')
-      sync.write(script)
-      sync.flush
-      @machine.communicate.upload(sync.path, '/tmp/sync')
-
-      @machine.communicate.sudo('bash /tmp/sync')
+    def update_hosts
+      @machine.guest.change_host_name(@machine.name.to_s)
+      @machine.communicate.sudo('install -m 644 /tmp/hosts /etc/hosts')
     end
 
     # Generates content appropriate for a linux hosts file
