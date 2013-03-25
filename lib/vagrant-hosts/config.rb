@@ -1,14 +1,20 @@
 require 'vagrant'
-require 'vagrant-hosts'
 
-class VagrantHosts::Config < Vagrant::Config::Base
+module VagrantHosts
+class Config < Vagrant.plugin('2', :config)
 
+  # @!attribute hosts
+  #   @return [Array<Array<String, Array<String>>>] A list of IP addresses and their aliases
   attr_reader :hosts
 
+  # @!attribute autoconfigure
+  #   @return [TrueClass, FalseClass] If hosts should be generated from the
+  #                                   other vagrant machines
+  attr_accessor :autoconfigure
+
   def initialize
-    super
     @hosts = []
-    @set_localhost = false
+    @autoconfigure = UNSET_VALUE
   end
 
   # Register a host for entry
@@ -19,6 +25,7 @@ class VagrantHosts::Config < Vagrant::Config::Base
     @hosts << [address, aliases]
   end
 
+  # All IPv6 multicast addresses
   def add_ipv6_multicast
     add_host '::1',     ['ip6-localhost', 'ip6-loopback']
     add_host 'fe00::0', ['ip6-localnet']
@@ -27,33 +34,29 @@ class VagrantHosts::Config < Vagrant::Config::Base
     add_host 'ff02::2', ['ip6-allrouters']
   end
 
-
-  def add_localhost
-    @set_localhost = true
-  end
-
-  # Print out a list of all host entries with respect to the current env
-  #
-  # This varies from the straight #hosts call because it handles localhost,
-  # which has to be evaluated with respect to a given environment
-  #
-  # @param [Hash] env The current environment
-  #
-  # @return [Array<String, Array<String>>] Pairs of IP addresses and their aliases
-  def all_hosts(env)
-    if @set_localhost
-      add_host '127.0.0.1', ['localhost']
-      add_host '127.0.1.1', [env[:vm].name]
+  def finalize!
+    if @autoconfigure == UNSET_VALUE or @hosts.empty?
+      @autoconfigure = true
     end
-
-    @hosts
   end
 
-  def validate(env, errors)
+  # @param other [VagrantHosts::Config]
+  # @return [VagrantHosts::Config] The merged results
+  def merge(other)
+    super.tap do |result|
+      result.hosts += other.hosts
+    end
+  end
+
+  def validate(machine)
+    errors = []
     @hosts.each do |(address, aliases)|
       unless aliases.is_a? Array
-        errors.add("#{address} should have an array of aliases, got #{aliases.inspect}:#{aliases.class}")
+        errors << "#{address} should have an array of aliases, got #{aliases.inspect}:#{aliases.class}"
       end
     end
+
+    {"Vagrant Hosts" => errors}
   end
+end
 end
