@@ -52,7 +52,6 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
       end
     end
 
-    private
     def all_hosts
       all_hosts = []
 
