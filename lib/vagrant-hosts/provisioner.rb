@@ -39,7 +39,7 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
     end
 
     def update_hosts
-      @machine.guest.change_host_name(@machine.name.to_s)
+      @machine.guest.capability(:change_host_name, @machine.name.to_s)
       @machine.communicate.sudo('install -m 644 /tmp/hosts /etc/hosts')
     end
 
