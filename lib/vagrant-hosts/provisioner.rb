@@ -39,7 +39,8 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
     end
 
     def update_hosts
-      @machine.guest.capability(:change_host_name, @machine.name.to_s)
+      hostname = @machine.config.vm.hostname || @machine.name.to_s
+      @machine.guest.capability(:change_host_name, hostname)
       @machine.communicate.sudo('install -m 644 /tmp/hosts /etc/hosts')
     end
 
@@ -75,10 +76,11 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
 
       names.each do |name|
         network_settings = env.machine(name, :virtualbox).config.vm.networks
+        hostname = env.machine(name, :virtualbox).config.vm.hostname
         network_settings.each do |entry|
           if entry[0] == :private_network
             ipaddr = entry[1][:ip]
-            hosts << [ipaddr, [name]]
+            hosts << [ipaddr, [hostname, name]]
           end
         end
       end
