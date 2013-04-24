@@ -79,7 +79,7 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
         network_settings.each do |entry|
           if entry[0] == :private_network
             ipaddr = entry[1][:ip]
-            hosts << [ipaddr, [name, hostname]]
+            hosts << [ipaddr, [hostname, name]]
           end
         end
       end
