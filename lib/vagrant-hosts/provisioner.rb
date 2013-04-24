@@ -75,10 +75,11 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
 
       names.each do |name|
         network_settings = env.machine(name, :virtualbox).config.vm.networks
+        hostname = env.machine(name, :virtualbox).config.vm.hostname
         network_settings.each do |entry|
           if entry[0] == :private_network
             ipaddr = entry[1][:ip]
-            hosts << [ipaddr, [name]]
+            hosts << [ipaddr, [name, hostname]]
           end
         end
       end
