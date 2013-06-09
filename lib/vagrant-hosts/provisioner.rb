@@ -1,13 +1,14 @@
 require 'vagrant'
 require 'tempfile'
-
+require 'vagrant-hosts/provisioner/hostname'
 
 module VagrantHosts
 class Provisioner < Vagrant.plugin('2', :provisioner)
 
+  include VagrantHosts::Provisioner::Hostname
+
   def initialize(machine, config)
     @machine, @config = machine, config
-    p
   end
 
   def provision
@@ -40,7 +41,7 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
 
     def update_hosts
       hostname = @machine.config.vm.hostname || @machine.name.to_s
-      @machine.guest.capability(:change_host_name, hostname)
+      change_host_name(hostname)
       @machine.communicate.sudo('install -m 644 /tmp/hosts /etc/hosts')
     end
 

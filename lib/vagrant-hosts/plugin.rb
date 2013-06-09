@@ -2,7 +2,7 @@ require 'vagrant'
 require 'vagrant-hosts'
 require 'vagrant-hosts/version'
 
-if Vagrant::VERSION < "1.2.0"
+if Vagrant::VERSION < "1.1.0"
   raise "vagrant-hosts version #{VagrantHosts::VERSION} requires Vagrant 1.2 or later"
 end
 
