@@ -4,11 +4,6 @@ require 'tempfile'
 module VagrantHosts
 class Provisioner < Vagrant.plugin('2', :provisioner)
 
-  # This has to be inside of this class, because otherwise the hostname mixin
-  # will create this class with a different superclass. It makes me sad. :(
-  require 'vagrant-hosts/provisioner/hostname'
-  include VagrantHosts::Provisioner::Hostname
-
   def initialize(machine, config)
     @machine, @config = machine, config
   end
@@ -22,6 +17,12 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
   end
 
   class Linux
+
+    # This has to be inside of this class, because otherwise the hostname mixin
+    # will create this class with a different superclass. It makes me sad. :(
+    require 'vagrant-hosts/provisioner/hostname'
+    include VagrantHosts::Provisioner::Hostname
+
 
     def initialize(machine, config)
       @machine, @config = machine, config
