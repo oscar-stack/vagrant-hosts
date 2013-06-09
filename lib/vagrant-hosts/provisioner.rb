@@ -1,10 +1,12 @@
 require 'vagrant'
 require 'tempfile'
-require 'vagrant-hosts/provisioner/hostname'
 
 module VagrantHosts
 class Provisioner < Vagrant.plugin('2', :provisioner)
 
+  # This has to be inside of this class, because otherwise the hostname mixin
+  # will create this class with a different superclass. It makes me sad. :(
+  require 'vagrant-hosts/provisioner/hostname'
   include VagrantHosts::Provisioner::Hostname
 
   def initialize(machine, config)

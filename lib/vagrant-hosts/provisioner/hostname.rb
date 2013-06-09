@@ -1,4 +1,5 @@
 require 'vagrant'
+require 'vagrant-hosts/provisioner'
 
 module VagrantHosts
 class Provisioner
