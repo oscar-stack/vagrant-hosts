@@ -2,8 +2,9 @@ require 'vagrant'
 require 'vagrant-hosts'
 require 'vagrant-hosts/version'
 
-if Vagrant::VERSION < "1.1.0"
-  raise "vagrant-hosts version #{VagrantHosts::VERSION} requires Vagrant 1.2 or later"
+if Vagrant::VERSION < VagrantHosts::REQUIRED_VAGRANT_VERSION
+  raise "vagrant-hosts version #{VagrantHosts::VERSION} requires Vagrant " +
+    "#{VagrantHosts::REQUIRED_VAGRANT_VERSION} or later"
 end
 
 class VagrantHosts::Plugin < Vagrant.plugin(2)
