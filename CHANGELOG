@@ -1,0 +1,16 @@
+CHANGELOG
+=========
+
+1.1.0
+-----
+
+This is a backwards compatible feature and bugfix release.
+
+  * Support Vagrant 1.2 change_host_name capability
+  * Support Vagrant 1.1 and 1.2 change_host_name invocation
+  * Add config.vm.hostname into hosts file if set
+
+Thanks to the following contributors:
+
+  - Patrick Otto
+  - Luke Amdor
