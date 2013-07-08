@@ -18,6 +18,8 @@ module Hostname
       @machine.guest.change_host_name(name)
     when /1\.2/
       @machine.guest.capability(:change_host_name, name)
+    else
+      raise RuntimeError, "#{Vagrant::VERSION} isn't a recognized Vagrant version, can't reliably shim `change_host_name`"
     end
   end
 
