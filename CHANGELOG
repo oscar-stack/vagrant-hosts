@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.1.1
+-----
+
+This is a backwards compatible feature and bugfix release.
+
+  * gemspec dependency on vagrant
+
 1.1.0
 -----
 
