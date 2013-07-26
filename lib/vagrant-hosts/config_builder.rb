@@ -2,7 +2,7 @@ require 'config_builder/model'
 
 module VagrantHosts
   module ConfigBuilder
-    class Model < ::ConfigBuilder::Model
+    class Model < ::ConfigBuilder::Model::Base
 
       # @!attribute [rw] hosts
       attr_accessor :hosts
