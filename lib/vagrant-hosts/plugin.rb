@@ -24,4 +24,8 @@ class VagrantHosts::Plugin < Vagrant.plugin(2)
     require_relative 'config'
     VagrantHosts::Config
   end
+
+  action_hook(:hosts, :config_builder_extension) do
+    require_relative 'config_builder'
+  end
 end
