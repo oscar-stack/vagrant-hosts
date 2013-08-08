@@ -1,7 +1,6 @@
-# Declare top level vagrant hosts module.
 module VagrantHosts
-  REQUIRED_VAGRANT_VERSION = '1.1.0'
+  require 'vagrant-hosts/version'
+  require 'vagrant-hosts/plugin'
 end
 
-require 'vagrant-hosts/version'
-require 'vagrant-hosts/plugin'
+I18n.load_path << File.expand_path('../templates/locales/en.yml', File.dirname(__FILE__))
