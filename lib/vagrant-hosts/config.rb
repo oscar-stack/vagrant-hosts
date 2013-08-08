@@ -35,8 +35,12 @@ class Config < Vagrant.plugin('2', :config)
   end
 
   def finalize!
-    if @autoconfigure == UNSET_VALUE or @hosts.empty?
-      @autoconfigure = true
+    if @autoconfigure == UNSET_VALUE
+     if  @hosts.empty?
+        @autoconfigure = true
+      else
+        @autoconfigure = false
+      end
     end
   end
 
