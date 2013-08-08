@@ -9,6 +9,8 @@ CHANGELOG
   * Update config_builder provisioner model registration syntax
   * GH-9 Use correct machine host for each /etc/hosts entry
 
+Thanks to Hunter Haugen for his help on this release.
+
 1.1.2
 -----
 
