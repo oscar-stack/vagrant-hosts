@@ -64,9 +64,9 @@ class VagrantHosts::Provisioner::Linux
       m_hostname = m.config.vm.hostname
 
       m_networks.each do |(net_type, opts)|
-        next unless net_types == :private_network
+        next unless net_type == :private_network
         addr = opts[:ip]
-        hosts << [addr, [m_hostname, @machine.name]]
+        hosts << [addr, [m.name, m_hostname]]
       end
     end
 
