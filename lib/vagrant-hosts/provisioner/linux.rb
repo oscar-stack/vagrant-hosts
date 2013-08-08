@@ -4,6 +4,8 @@ class VagrantHosts::Provisioner::Linux
 
   def initialize(machine, config)
     @machine, @config = machine, config
+
+    @env = @machine.env
   end
 
   def sync!
@@ -37,35 +39,42 @@ class VagrantHosts::Provisioner::Linux
 
   def all_hosts
     all_hosts = []
+    all_hosts += local_hosts
 
     if @config.autoconfigure
       all_hosts += vagrant_hosts
     end
     all_hosts += @config.hosts
 
-    all_hosts.unshift(['127.0.0.1', ['localhost']])
-    all_hosts.unshift(['127.0.1.1', [@machine.name]])
+    all_hosts
+  end
+
+  def local_hosts
+    [
+      ['127.0.0.1', ['localhost']],
+      ['127.0.1.1', [@machine.name]],
+    ]
   end
 
   def vagrant_hosts
     hosts = []
-    env = @machine.env
-    names = env.machine_names
 
-    # Assume that all VMs are using the current provider
-    provider = @machine.provider
+    all_machines.each do |m|
+      m_networks = m.config.vm.networks
+      m_hostname = m.config.vm.hostname
 
-    names.each do |name|
-      network_settings = env.machine(name, :virtualbox).config.vm.networks
-      hostname = env.machine(name, :virtualbox).config.vm.hostname
-      network_settings.each do |entry|
-        if entry[0] == :private_network
-          ipaddr = entry[1][:ip]
-          hosts << [ipaddr, [hostname, name]]
-        end
+      m_networks.each do |(net_type, opts)|
+        next unless net_types == :private_network
+        addr = opts[:ip]
+        hosts << [addr, [m_hostname, @machine.name]]
       end
     end
 
     hosts
+  end
+
+  # @return [Array<Vagrant::Machine>]
+  def all_machines
+    @env.active_machines.map { |vm_id| @env.machine(*vm_id) }
   end
 end
