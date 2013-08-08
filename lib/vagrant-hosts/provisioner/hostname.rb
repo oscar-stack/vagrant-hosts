@@ -1,4 +1,5 @@
 require 'vagrant'
+require 'vagrant/errors'
 
 # Abstract the details of setting a guest hostname on different versions of
 # Vagrant.
@@ -8,6 +9,10 @@ require 'vagrant'
 # 1.1 and 1.2. :(
 module VagrantHosts::Provisioner::Hostname
 
+  class UnknownVersion < Vagrant::Errors::VagrantError
+    error_key(:unknown_version, 'vagrant_hosts')
+  end
+
   # @param name [String] The new hostname to apply on the guest
   def change_host_name(name)
     case Vagrant::VERSION
@@ -16,7 +21,7 @@ module VagrantHosts::Provisioner::Hostname
     when /1\.2/
       @machine.guest.capability(:change_host_name, name)
     else
-      raise RuntimeError, "#{Vagrant::VERSION} isn't a recognized Vagrant version, can't reliably shim `change_host_name`"
+      raise UnknownVersion, :vagrant_version => Vagrant::VERSION
     end
   end
 end
