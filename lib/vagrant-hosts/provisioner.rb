@@ -62,9 +62,8 @@ class Provisioner < Vagrant.plugin('2', :provisioner)
 
       if @config.autoconfigure
         all_hosts += vagrant_hosts
-      else
-        all_hosts += @config.hosts
       end
+      all_hosts += @config.hosts
 
       all_hosts.unshift(['127.0.0.1', ['localhost']])
       all_hosts.unshift(['127.0.1.1', [@machine.name]])
