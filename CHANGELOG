@@ -11,7 +11,9 @@ This is a backwards compatible bugfix release.
   * GH-6 provisioner `autoconfigure` option works with explicit hosts
   * GH-7 all host aliases are respected
   * Autoconfigured entries should ensure private_networks have an IP address
+  * Remove hardcoded dependency on virtualbox vm provider
 
+Thanks to Tom Linkin for his help on this release.
 
 1.1.1
 -----
