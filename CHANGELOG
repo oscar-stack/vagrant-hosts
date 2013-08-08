@@ -1,6 +1,18 @@
 CHANGELOG
 =========
 
+1.1.2
+-----
+
+2013-08-07
+
+This is a backwards compatible bugfix release.
+
+  * GH-6 provisioner `autoconfigure` option works with explicit hosts
+  * GH-7 all host aliases are respected
+  * Autoconfigured entries should ensure private_networks have an IP address
+
+
 1.1.1
 -----
 
