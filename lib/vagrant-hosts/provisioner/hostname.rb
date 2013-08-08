@@ -1,9 +1,5 @@
 require 'vagrant'
-require 'vagrant-hosts/provisioner'
-
-module VagrantHosts
-class Provisioner
-module Hostname
+module VagrantHosts::Provisioner::Hostname
   # Abstract the details of setting a guest hostname on different versions of
   # Vagrant.
   #
@@ -22,7 +18,4 @@ module Hostname
       raise RuntimeError, "#{Vagrant::VERSION} isn't a recognized Vagrant version, can't reliably shim `change_host_name`"
     end
   end
-
-end
-end
 end
