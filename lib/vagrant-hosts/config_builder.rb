@@ -25,7 +25,7 @@ module VagrantHosts
         end
       end
 
-      ::ConfigBuilder::ModelCollection.provisioner.register('hosts', self)
+      ::ConfigBuilder::Model::Provisioner.register('shell', self)
     end
   end
 end
