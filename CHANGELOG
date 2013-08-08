@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+1.1.3
+-----
+
+2013-08-08
+
+  * Update config_builder provisioner model registration syntax
+  * GH-9 Use correct machine host for each /etc/hosts entry
+
 1.1.2
 -----
 
