@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+1.1.4
+-----
+
+2013-08-18
+
+This is a backwards compatible bugfix release.
+
+  * Register config_builder provisioner extension with 'hosts' identifier
+
 1.1.3
 -----
 
