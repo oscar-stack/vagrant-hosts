@@ -50,9 +50,12 @@ class VagrantHosts::Provisioner::Linux
   end
 
   def local_hosts
+    hostname = @machine.config.vm.hostname
+    hostname ||= @machine.name # Fall back if hostname is unset.
+
     [
       ['127.0.0.1', ['localhost']],
-      ['127.0.1.1', [@machine.name]],
+      ['127.0.1.1', [hostname]],
     ]
   end
 
