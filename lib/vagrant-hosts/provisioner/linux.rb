@@ -49,13 +49,25 @@ class VagrantHosts::Provisioner::Linux
     all_hosts
   end
 
-  def local_hosts
-    hostname = @machine.config.vm.hostname
-    hostname ||= @machine.name # Fall back if hostname is unset.
+  # Builds an array containing hostname and aliases for a given machine.
+  def hostnames_for_machine machine
+    # Cast any Symbols to Strings
+    machine_name = machine.name.to_s
+    hostname = machine.config.vm.hostname || machine_name
 
+    hostnames = [hostname]
+    # If the hostname is a fqdn, add the first component as an alias.
+    hostnames << hostname.split('.').first if hostname.index('.')
+    # Also add the machine name as an alias.
+    hostnames << machine_name unless hostnames.include? machine_name
+
+    hostnames
+  end
+
+  def local_hosts
     [
       ['127.0.0.1', ['localhost']],
-      ['127.0.1.1', [hostname]],
+      ['127.0.1.1', hostnames_for_machine(@machine)],
     ]
   end
 
@@ -63,13 +75,10 @@ class VagrantHosts::Provisioner::Linux
     hosts = []
 
     all_machines.each do |m|
-      m_networks = m.config.vm.networks
-      m_hostname = m.config.vm.hostname
-
-      m_networks.each do |(net_type, opts)|
+      m.config.vm.networks.each do |(net_type, opts)|
         next unless net_type == :private_network
         addr = opts[:ip]
-        hosts << [addr, [m.name, m_hostname]]
+        hosts << [addr, hostnames_for_machine(m)]
       end
     end
 
