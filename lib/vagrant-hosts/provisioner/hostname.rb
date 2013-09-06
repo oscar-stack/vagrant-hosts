@@ -16,9 +16,9 @@ module VagrantHosts::Provisioner::Hostname
   # @param name [String] The new hostname to apply on the guest
   def change_host_name(name)
     case Vagrant::VERSION
-    when /1\.1/
+    when /^1\.1/
       @machine.guest.change_host_name(name)
-    when /1\.2/
+    when /^1\.2/, /^1\.3/
       @machine.guest.capability(:change_host_name, name)
     else
       raise UnknownVersion, :vagrant_version => Vagrant::VERSION
