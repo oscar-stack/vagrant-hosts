@@ -1,6 +1,20 @@
 CHANGELOG
 =========
 
+1.1.5
+-----
+
+2013-09-06
+
+This is a backwards compatible bugfix release.
+
+  * (GH-11) Assign `config.vm.hostname` to 127.0.1.1 if available
+  * (GH-10, GH-13) Normalize hostnames and aliases.
+  * Add `change_host_name` shim support for Vagrant 1.3
+
+Thanks to Charlie Sharpsteen for pretty much authoring this entire release.
+
+
 1.1.4
 -----
 
