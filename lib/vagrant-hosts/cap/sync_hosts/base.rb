@@ -1,39 +1,34 @@
-class VagrantHosts::Provisioner::Linux
+# Provide an abstract base class for syncing hosts entries
+class VagrantHosts::Cap::SyncHosts::Base
 
-  include VagrantHosts::Provisioner::Hostname
+  def self.sync_hosts(machine, config)
+    new(machine, config).sync!
+  end
 
   def initialize(machine, config)
     @machine, @config = machine, config
-
     @env = @machine.env
   end
 
   def sync!
-    upload_tmphosts
+    hostname = @machine.config.vm.hostname || @machine.name.to_s
+    change_host_name(hostname)
+
+    # call to method not implemented by abstract base class
     update_hosts
   end
 
   private
 
-  def upload_tmphosts
-    cache = Tempfile.new('tmp-hosts')
-    cache.write(format_hosts)
-    cache.flush
-    @machine.communicate.upload(cache.path, '/tmp/hosts')
-  end
-
-  def update_hosts
-    hostname = @machine.config.vm.hostname || @machine.name.to_s
-    change_host_name(hostname)
-    @machine.communicate.sudo('install -m 644 /tmp/hosts /etc/hosts')
-  end
-
-  # Generates content appropriate for a linux hosts file
-  #
-  # @return [String] All hosts in the config joined into hosts records
-  def format_hosts
-    all_hosts.inject('') do |str, (address, aliases)|
-      str << "#{address} #{aliases.join(' ')}\n"
+  # @param name [String] The new hostname to apply on the guest
+  def change_host_name(name)
+    case Vagrant::VERSION
+    when /^1\.1/
+      @machine.guest.change_host_name(name)
+    when /^1\.2/, /^1\.3/
+      @machine.guest.capability(:change_host_name, name)
+    else
+      raise UnknownVersion, :vagrant_version => Vagrant::VERSION
     end
   end
 
@@ -89,4 +84,5 @@ class VagrantHosts::Provisioner::Linux
   def all_machines
     @env.active_machines.map { |vm_id| @env.machine(*vm_id) }
   end
+
 end
