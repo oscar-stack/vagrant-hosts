@@ -10,15 +10,29 @@ class VagrantHosts::Plugin < Vagrant.plugin(2)
   Vagrant guests.
   DESC
 
-  provisioner(:hosts) do
-    require_relative 'provisioner'
-    VagrantHosts::Provisioner
-  end
-
   config(:hosts, :provisioner) do
     require_relative 'config'
     VagrantHosts::Config
   end
+
+  provisioner(:hosts) do
+    require_relative 'provisioner/hosts'
+    VagrantHosts::Provisioner::Hosts
+  end
+
+  # Guest capabilities for vagrant-hosts
+
+  guest_capability(:linux, 'sync_hosts') do
+    require_relative 'cap'
+    VagrantHosts::Cap::SyncHosts::POSIX
+  end
+
+  guest_capability(:solaris, 'sync_hosts') do
+    require_relative 'cap'
+    VagrantHosts::Cap::SyncHosts::POSIX
+  end
+
+  # ConfigBuilder tie-ins
 
   def self.config_builder_hook
     require_relative 'config_builder'
