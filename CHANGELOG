@@ -1,6 +1,19 @@
 CHANGELOG
 =========
 
+2.0.0
+-----
+
+2013-09-16
+
+This is a backwards incompatible feature release.
+
+  * (GH-15) Extract guest operating system configuration to capabilities
+  * (GH-15) Add support for Windows guests
+
+Thanks to Reid Vandewiele for doing the heavy lifting of extracting the
+capabilities and adding the Windows guest capability.
+
 1.1.5
 -----
 
