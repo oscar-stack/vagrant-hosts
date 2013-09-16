@@ -2,7 +2,7 @@
 class VagrantHosts::Cap::SyncHosts::Base
 
   def self.sync_hosts(machine, config)
-    new(machine, config)
+    new(machine, config).sync!
   end
 
   def initialize(machine, config)

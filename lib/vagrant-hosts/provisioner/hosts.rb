@@ -9,8 +9,7 @@ module VagrantHosts
       end
 
       def provision
-        driver = @machine.guest.capability(:sync_hosts, @config)
-        driver.sync!
+        @machine.guest.capability(:sync_hosts, @config)
       end
 
     end
