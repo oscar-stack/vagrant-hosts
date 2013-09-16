@@ -32,6 +32,11 @@ class VagrantHosts::Plugin < Vagrant.plugin(2)
     VagrantHosts::Cap::SyncHosts::POSIX
   end
 
+  guest_capability(:windows, 'sync_hosts') do
+    require_relative 'cap'
+    VagrantHosts::Cap::SyncHosts::Windows
+  end
+
   # ConfigBuilder tie-ins
 
   def self.config_builder_hook
