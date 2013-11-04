@@ -21,7 +21,7 @@ class VagrantHosts::Command::Puppetize < Vagrant.plugin('2', :command)
   private
 
   def format_hosts
-    vagrant_hosts.inject('') do |str, (address, aliases)|
+    vagrant_hosts(@env).inject('') do |str, (address, aliases)|
       str << "host { '#{aliases.shift}':\n  ip => '#{address}',\n"
       str << "host_aliases => ['#{aliases.join('\', \' ')}'],\n" if (!aliases.empty?)
       str << "}\n"

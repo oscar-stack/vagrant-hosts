@@ -19,7 +19,7 @@ class VagrantHosts::Cap::SyncHosts::POSIX < VagrantHosts::Cap::SyncHosts::Base
   #
   # @return [String] All hosts in the config joined into hosts records
   def format_hosts
-    all_hosts.inject('') do |str, (address, aliases)|
+    all_hosts(@config).inject('') do |str, (address, aliases)|
       str << "#{address} #{aliases.join(' ')}\n"
     end
   end

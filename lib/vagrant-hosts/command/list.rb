@@ -22,7 +22,7 @@ class VagrantHosts::Command::List < Vagrant.plugin('2', :command)
   private
 
   def format_hosts
-    vagrant_hosts.inject('') do |str, (address, aliases)|
+    vagrant_hosts(@env).inject('') do |str, (address, aliases)|
       str << "#{address} #{aliases.join(' ')}\n"
     end
   end

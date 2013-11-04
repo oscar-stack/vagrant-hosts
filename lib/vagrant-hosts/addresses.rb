@@ -2,15 +2,15 @@ module VagrantHosts::Addresses
   
   private
 
-  def all_hosts
+  def all_hosts(config)
 
     all_hosts = []
     all_hosts += local_hosts
 
-    if @config.autoconfigure
+    if config.autoconfigure
       all_hosts += vagrant_hosts
     end
-    all_hosts += @config.hosts
+    all_hosts += config.hosts
 
     all_hosts
   end
@@ -30,17 +30,17 @@ module VagrantHosts::Addresses
     hostnames
   end
 
-  def local_hosts
+  def local_hosts(machine)
     [
       ['127.0.0.1', ['localhost']],
-      ['127.0.1.1', hostnames_for_machine(@machine)],
+      ['127.0.1.1', hostnames_for_machine(machine)],
     ]
   end
 
-  def vagrant_hosts
+  def vagrant_hosts(env)
     hosts = []
 
-    all_machines.each do |m|
+    all_machines(env).each do |m|
       m.config.vm.networks.each do |(net_type, opts)|
         next unless net_type == :private_network
         addr = opts[:ip]
@@ -52,8 +52,8 @@ module VagrantHosts::Addresses
   end
 
   # @return [Array<Vagrant::Machine>]
-  def all_machines
-    @env.active_machines.map { |vm_id| @env.machine(*vm_id) }
+  def all_machines(env)
+    env.active_machines.map { |vm_id| env.machine(*vm_id) }
   end
 
 end
