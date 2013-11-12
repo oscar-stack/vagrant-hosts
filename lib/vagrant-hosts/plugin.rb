@@ -37,6 +37,11 @@ class VagrantHosts::Plugin < Vagrant.plugin(2)
     VagrantHosts::Cap::SyncHosts::Windows
   end
 
+  command(:hosts) do
+    require_relative 'command'
+    VagrantHosts::Command
+  end
+
   # ConfigBuilder tie-ins
 
   def self.config_builder_hook

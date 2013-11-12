@@ -3,7 +3,7 @@ class VagrantHosts::Cap::SyncHosts::Windows < VagrantHosts::Cap::SyncHosts::Base
 
   def update_hosts
     host_entries = []
-    all_hosts.each do |(address, aliases)|
+    all_hosts(@config).each do |(address, aliases)|
       aliases.each do |name|
         host_entries << "#{address} #{name}"
       end
