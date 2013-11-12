@@ -1,4 +1,7 @@
 # Provide a base class for syncing hosts entries on POSIX systems.
+
+require 'tempfile'
+
 class VagrantHosts::Cap::SyncHosts::POSIX < VagrantHosts::Cap::SyncHosts::Base
 
   private
