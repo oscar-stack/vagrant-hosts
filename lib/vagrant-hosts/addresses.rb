@@ -5,10 +5,10 @@ module VagrantHosts::Addresses
   def all_hosts(config)
 
     all_hosts = []
-    all_hosts += local_hosts
+    all_hosts += local_hosts(@machine)
 
     if config.autoconfigure
-      all_hosts += vagrant_hosts
+      all_hosts += vagrant_hosts(@env)
     end
     all_hosts += config.hosts
 
