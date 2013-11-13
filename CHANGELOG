@@ -1,6 +1,17 @@
 CHANGELOG
 =========
 
+2.1.0
+-----
+
+2013-11-13
+
+This is a backwards compatible feature and bugfix release.
+
+  * (GH-19) Explicitly require 'tempfile' to define Tempfile constant
+  * (GH-18) Add `hosts` command to list machine addresses and generate Puppet
+    manifests to create host entries on the host machine.
+
 2.0.0
 -----
 
