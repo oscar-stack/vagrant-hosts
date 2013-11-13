@@ -4,7 +4,7 @@ module VagrantHosts
 
     require 'vagrant-hosts/command/helpers'
     include VagrantHosts::Command::Helpers
-    
+
     require 'vagrant-hosts/addresses'
 
 

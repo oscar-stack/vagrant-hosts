@@ -12,7 +12,7 @@ class VagrantHosts::Command::List < Vagrant.plugin('2', :command)
   end
 
   def execute
-    
+
     argv = parse_options(parser)
 
     @env.ui.info format_hosts

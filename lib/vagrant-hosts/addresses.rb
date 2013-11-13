@@ -1,5 +1,5 @@
 module VagrantHosts::Addresses
-  
+
   private
 
   def all_hosts(config)
