@@ -31,7 +31,7 @@ class VagrantHosts::Cap::SyncHosts::Base
     when /^1\.[234]/
       @machine.guest.capability(:change_host_name, name)
     else
-      raise UnknownVersion, :vagrant_version => Vagrant::VERSION
+      raise VagrantHosts::Cap::SyncHosts::UnknownVersion, :vagrant_version => Vagrant::VERSION
     end
   end
 
