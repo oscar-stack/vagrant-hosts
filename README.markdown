@@ -61,7 +61,7 @@ Use autodetection with manual entries
         node.vm.network :private_network, :ip => '10.20.1.2'
         node.vm.provision :hosts do |provisioner|
           provisioner.autoconfigure = true
-          provisioner.add_host 172.16.3.10, ['yum.mirror.local']
+          provisioner.add_host '172.16.3.10', ['yum.mirror.local']
         end
 
       end
@@ -71,7 +71,7 @@ Use autodetection with manual entries
         node.vm.network :private_network, :ip => '10.20.1.3'
         node.vm.provision :hosts do |provisioner|
           provisioner.autoconfigure = true
-          provisioner.add_host 172.16.3.11, ['apt.mirror.local']
+          provisioner.add_host '172.16.3.11', ['apt.mirror.local']
         end
       end
     end
