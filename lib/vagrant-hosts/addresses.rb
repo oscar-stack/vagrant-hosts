@@ -53,7 +53,13 @@ module VagrantHosts::Addresses
 
   # @return [Array<Vagrant::Machine>]
   def all_machines(env)
-    env.active_machines.map { |vm_id| env.machine(*vm_id) }
+    env.active_machines.map do |vm_id|
+      begin
+        env.machine(*vm_id)
+      rescue Vagrant::Errors::MachineNotFound
+        nil
+      end
+    end.compact
   end
 
 end
