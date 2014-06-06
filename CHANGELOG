@@ -1,6 +1,19 @@
 CHANGELOG
 =========
 
+2.1.5
+-----
+
+2014-06-06
+
+This is a backwards compatible bugfix release.
+
+  * (GH-34)  Fix errors raised when a machine exists in the `.vagrant`
+    directory but no longer has a config in the `Vagrantfile`.
+
+Thanks to cbliard for their work on this release.
+
+
 2.1.4
 -----
 
