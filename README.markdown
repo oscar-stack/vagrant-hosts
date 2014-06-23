@@ -8,73 +8,79 @@ Synopsis
 
 Manually specify addresses:
 
-    Vagrant.configure('2') do |config|
-      config.vm.box = "ubuntu-12.04-server-i386"
+```ruby
+Vagrant.configure('2') do |config|
+  config.vm.box = "ubuntu-12.04-server-i386"
 
-      config.vm.provision :hosts do |provisioner|
-        # Add a single hostname
-        provisioner.add_host '10.0.2.2', ['myhost.vagrantup.internal']
+  config.vm.provision :hosts do |provisioner|
+    # Add a single hostname
+    provisioner.add_host '10.0.2.2', ['myhost.vagrantup.internal']
 
-        # Or a fqdn and a short hostname
-        provisioner.add_host '10.0.2.3', ['myotherhost.vagrantup.internal', 'myotherhost']
+    # Or a fqdn and a short hostname
+    provisioner.add_host '10.0.2.3', ['myotherhost.vagrantup.internal', 'myotherhost']
 
-        # Or as many aliases as you like!
-        provisioner.add_host '10.0.2.5', [
-          'mypuppetmaster.vagrantup.internal',
-          'puppet.vagrantup.internal',
-          'mypuppetmaster',
-          'puppet'
-        ]
-      end
-    end
+    # Or as many aliases as you like!
+    provisioner.add_host '10.0.2.5', [
+      'mypuppetmaster.vagrantup.internal',
+      'puppet.vagrantup.internal',
+      'mypuppetmaster',
+      'puppet'
+    ]
+  end
+end
+```
 
 - - -
 
 Autodetect internal network addresses and autoconfigure hosts:
 
-    # Autoconfigure hosts. This will copy the private network addresses from
-    # each VM and update hosts entries on all other machines. No further
-    # configuration is needed.
-    Vagrant.configure('2') do |config|
+```ruby
+# Autoconfigure hosts. This will copy the private network addresses from
+# each VM and update hosts entries on all other machines. No further
+# configuration is needed.
+Vagrant.configure('2') do |config|
 
-      config.vm.define :first do |node|
-        node.vm.box = "ubuntu-12.04-server-i386"
-        node.vm.network :private_network, :ip => '10.20.1.2'
-        node.vm.provision :hosts
-      end
+  config.vm.define :first do |node|
+    node.vm.box = "ubuntu-12.04-server-i386"
+    node.vm.network :private_network, :ip => '10.20.1.2'
+    node.vm.provision :hosts
+  end
 
-      config.vm.define :second do |node|
-        node.vm.box = "ubuntu-12.04-server-i386"
-        node.vm.network :private_network, :ip => '10.20.1.3'
-        node.vm.provision :hosts
-      end
-    end
+  config.vm.define :second do |node|
+    node.vm.box = "ubuntu-12.04-server-i386"
+    node.vm.network :private_network, :ip => '10.20.1.3'
+    node.vm.provision :hosts
+  end
+end
+```
 
 - - -
 
 Use autodetection with manual entries
 
-    Vagrant.configure('2') do |config|
+```ruby
+Vagrant.configure('2') do |config|
 
-      config.vm.define :first do |node|
-        node.vm.box = "ubuntu-12.04-server-i386"
-        node.vm.network :private_network, :ip => '10.20.1.2'
-        node.vm.provision :hosts do |provisioner|
-          provisioner.autoconfigure = true
-          provisioner.add_host '172.16.3.10', ['yum.mirror.local']
-        end
-
-      end
-
-      config.vm.define :second do |node|
-        node.vm.box = "ubuntu-12.04-server-i386"
-        node.vm.network :private_network, :ip => '10.20.1.3'
-        node.vm.provision :hosts do |provisioner|
-          provisioner.autoconfigure = true
-          provisioner.add_host '172.16.3.11', ['apt.mirror.local']
-        end
-      end
+  config.vm.define :first do |node|
+    node.vm.box = "ubuntu-12.04-server-i386"
+    node.vm.network :private_network, :ip => '10.20.1.2'
+    node.vm.provision :hosts do |provisioner|
+      provisioner.autoconfigure = true
+      provisioner.add_host '172.16.3.10', ['yum.mirror.local']
     end
+
+  end
+
+  config.vm.define :second do |node|
+    node.vm.box = "ubuntu-12.04-server-i386"
+    node.vm.network :private_network, :ip => '10.20.1.3'
+    node.vm.provision :hosts do |provisioner|
+      provisioner.autoconfigure = true
+      provisioner.add_host '172.16.3.11', ['apt.mirror.local']
+    end
+  end
+end
+```
 
 Supported Platforms
 -------------------
