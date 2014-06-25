@@ -12,9 +12,12 @@ module VagrantHosts
     #                                   other vagrant machines
     attr_accessor :autoconfigure
 
+    attr_accessor :add_localhost_hostnames
+
     def initialize
       @hosts = []
       @autoconfigure = UNSET_VALUE
+      @add_localhost_hostnames = UNSET_VALUE
     end
 
     # Register a host for entry
@@ -41,6 +44,10 @@ module VagrantHosts
         else
           @autoconfigure = false
         end
+      end
+
+      if @add_localhost_hostnames == UNSET_VALUE
+        @add_localhost_hostnames = true
       end
     end
 

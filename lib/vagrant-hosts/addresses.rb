@@ -3,9 +3,8 @@ module VagrantHosts::Addresses
   private
 
   def all_hosts(config)
-
     all_hosts = []
-    all_hosts += local_hosts(@machine)
+    all_hosts += local_hosts(@machine, config)
 
     if config.autoconfigure
       all_hosts += vagrant_hosts(@env)
@@ -30,11 +29,14 @@ module VagrantHosts::Addresses
     hostnames
   end
 
-  def local_hosts(machine)
-    [
-      ['127.0.0.1', ['localhost']],
-      ['127.0.1.1', hostnames_for_machine(machine)],
-    ]
+  def local_hosts(machine, config)
+    entries = [['127.0.0.1', ['localhost']]]
+
+    if config.add_localhost_hostnames
+      entries << ['127.0.1.1', hostnames_for_machine(machine)]
+    end
+
+    entries
   end
 
   def vagrant_hosts(env)
