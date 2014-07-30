@@ -1,6 +1,18 @@
 CHANGELOG
 =========
 
+2.2.0
+-----
+
+2014-07-30
+
+This is a backwards compatible feature release
+
+  * (GH-24) Allow users to enable/disable localhost entries
+  * (GH-35) Add support for OSX guests
+
+Thanks to Jeff Goldschrafe for their work on this release.
+
 2.1.5
 -----
 
