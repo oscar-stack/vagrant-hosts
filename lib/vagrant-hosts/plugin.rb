@@ -22,7 +22,7 @@ class VagrantHosts::Plugin < Vagrant.plugin(2)
 
   # Guest capabilities for vagrant-hosts
 
-  [:darwin, :linux, :solaris].each do |os|
+  [:darwin, :linux, :solaris, :solaris11].each do |os|
     guest_capability(os, 'sync_hosts') do
       require_relative 'cap'
       VagrantHosts::Cap::SyncHosts::POSIX
