@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+2.2.1
+-----
+
+2014-08-29
+
+This is a backwards compatible bugfix release.
+
+  * Fix detection of Solaris 11 as a POSIX operating system.
+
 2.2.0
 -----
 
