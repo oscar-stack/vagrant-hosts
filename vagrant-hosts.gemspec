@@ -1,5 +1,6 @@
 $LOAD_PATH << File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
 require 'vagrant-hosts/version'
+require 'date'
 
 Gem::Specification.new do |gem|
   gem.name    = 'vagrant-hosts'
