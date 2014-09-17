@@ -17,7 +17,7 @@ class VagrantHosts::Cap::SyncHosts::Windows < VagrantHosts::Cap::SyncHosts::Base
       script << "if (!((gc \$HostsLocation) -contains $HostEntry)) { Add-Content -Path $HostsLocation -Value $HostEntry; }"
     end
 
-    @machine.communicate.sudo(script.join("\r\n"))
+    @machine.communicate.sudo(script.join("\r\n"), :elevated => true)
   end
 
 end
