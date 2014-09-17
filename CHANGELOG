@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+2.2.2
+-----
+
+2014-09-17
+
+This is a backwards compatible bugfix release.
+
+  * (GH-37) Fix setting multiple hosts on Windows through WinRM.
+
 2.2.1
 -----
 
