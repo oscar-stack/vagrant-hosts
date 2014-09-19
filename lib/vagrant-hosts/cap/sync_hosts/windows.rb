@@ -10,14 +10,13 @@ class VagrantHosts::Cap::SyncHosts::Windows < VagrantHosts::Cap::SyncHosts::Base
     end
 
     script = []
-    script << '$HostsLocation = "$env:windir\\System32\\drivers\\etc\\hosts";'
+    script << '$HostsPath = "$env:windir\\System32\\drivers\\etc\\hosts"'
+    script << '$Hosts = gc $HostsPath'
 
-    host_entries.each do |entry|
-      script << "\$HostEntry = \"#{entry}\""
-      script << "if (!((gc \$HostsLocation) -contains $HostEntry)) { Add-Content -Path $HostsLocation -Value $HostEntry; }"
-    end
+    host_defs = "'" + host_entries.join('\', \'') + "'"
+    script << "@(#{host_defs}) | % { if (\$Hosts -notcontains \$_) { Add-Content -Path \$HostsPath -Value \$_ }}"
 
-    @machine.communicate.sudo(script.join("\r\n"), :elevated => true)
+    @machine.communicate.sudo(script.join("; "))
   end
 
 end
