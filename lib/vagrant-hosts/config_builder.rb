@@ -16,7 +16,7 @@ module VagrantHosts
       def to_proc
         Proc.new do |vm_config|
           vm_config.provision :hosts do |h_config|
-            h_config.autoconfigure = @autoconfigure if defined? @autoconfigure
+            h_config.autoconfigure = attr(:autoconfigure) unless attr(:autoconfigure).nil?
 
             @hosts.each do |(address, aliases)|
               h_config.add_host address, aliases
