@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+2.3.0
+-----
+
+2014-12-16
+
+This is a backwards compatible feature release.
+
+  * (GH-44) Remove pessimistic version checking.
+
 2.2.4
 -----
 
