@@ -15,7 +15,7 @@ class VagrantHosts::Cap::SyncHosts::POSIX < VagrantHosts::Cap::SyncHosts::Base
 
   def update_hosts
     upload_tmphosts
-    @machine.communicate.sudo('install -m 644 /tmp/hosts /etc/hosts')
+    @machine.communicate.sudo('cat /tmp/hosts > /etc/hosts')
   end
 
   # Generates content appropriate for a linux hosts file
