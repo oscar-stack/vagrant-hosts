@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+2.4.0
+-----
+
+2015-03-06
+
+This is a backwards compatible feature release.
+
+  * (GH-43) Support for bind mounted /etc/hosts on docker containers
+
 2.3.0
 -----
 
