@@ -19,4 +19,23 @@ class VagrantHosts::Cap::SyncHosts::Windows < VagrantHosts::Cap::SyncHosts::Base
     @machine.communicate.sudo(script.join("; "))
   end
 
+  # Windows needs a modification of the base method because Windows guest names
+  # cannot be fully-qualified domain names (they cannot contain the "."
+  # character). Therefore, modify the input name to convert illegal characters
+  # to legal replacements.
+  #
+  # @param name [String] The new hostname to apply on the guest
+  def change_host_name(name)
+    safechars = name.gsub(%r{[\\/.@*,"]}, '-')
+
+    safename = if (safechars.length > 15)
+                firstname = name.split(%r{[\\/.@*,"]}).first
+                firstname.length > 0 ? firstname : safechars.truncate(15)
+              else
+                safechars
+              end
+
+    super(safename)
+  end
+
 end
