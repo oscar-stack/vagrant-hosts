@@ -26,16 +26,58 @@ class VagrantHosts::Cap::SyncHosts::Windows < VagrantHosts::Cap::SyncHosts::Base
   #
   # @param name [String] The new hostname to apply on the guest
   def change_host_name(name)
-    safechars = name.gsub(%r{[\\/.@*,"]}, '-')
 
-    safename = if (safechars.length > 15)
-                firstname = name.split(%r{[\\/.@*,"]}).first
-                firstname.length > 0 ? firstname : safechars.truncate(15)
-              else
-                safechars
-              end
+    # First set the machine name (hostname)
+    components = name.split('.')
+    hostname   = components.first
+    domainname = components.slice(1, components.size).join('.')
 
-    super(safename)
+    super(hostname)
+
+    # Next set the Primary DNS Suffix, if it makes sense (domainname)
+    unless domainname.empty?
+      change_domain_name(domainname)
+    end
+  end
+
+  def change_domain_name(domainname)
+    # Source: http://poshcode.org/2958
+    # Note that whitespace is important in this inline powershell script due
+    # to the use of a here-string.
+    powershell = <<-END_OF_POWERSHELL
+function Set-PrimaryDnsSuffix {
+  param ([string] $Suffix)
+
+  # http://msdn.microsoft.com/en-us/library/ms724224(v=vs.85).aspx
+  $ComputerNamePhysicalDnsDomain = 6
+
+  Add-Type -TypeDefinition @"
+  using System;
+  using System.Runtime.InteropServices;
+
+  namespace ComputerSystem {
+      public class Identification {
+          [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+          static extern bool SetComputerNameEx(int NameType, string lpBuffer);
+
+          public static bool SetPrimaryDnsSuffix(string suffix) {
+              try {
+                  return SetComputerNameEx($ComputerNamePhysicalDnsDomain, suffix);
+              }
+              catch (Exception) {
+                  return false;
+              }
+          }
+      }
+  }
+"@
+  [ComputerSystem.Identification]::SetPrimaryDnsSuffix($Suffix)
+}
+
+Set-PrimaryDnsSuffix "#{domainname}"
+    END_OF_POWERSHELL
+
+    @machine.communicate.sudo(powershell)
   end
 
 end
