@@ -74,7 +74,8 @@ function Set-PrimaryDnsSuffix {
   [ComputerSystem.Identification]::SetPrimaryDnsSuffix($Suffix)
 }
 
-Set-PrimaryDnsSuffix "#{domainname}"
+$success = Set-PrimaryDnsSuffix "#{domainname}"
+if ($success -eq $True) {exit 0} else {exit 1}
     END_OF_POWERSHELL
 
     @machine.communicate.sudo(powershell)
