@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+2.5.0
+-----
+
+2015-07-16
+
+This is a backwards compatible feature release.
+
+  * (GH-49) Support fqdn-named Windows Vagrant machines
+
 2.4.0
 -----
 
