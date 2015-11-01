@@ -4,12 +4,51 @@ module VagrantHosts
   module Provisioner
     class Hosts < Vagrant.plugin('2', :provisioner)
 
-      def initialize(machine, config)
-        super
-      end
-
       def provision
         @machine.guest.capability(:sync_hosts, @config)
+        sync_hosts! if @config.sync_hosts
+      end
+
+      def cleanup
+        sync_hosts! if @config.sync_hosts
+      end
+
+      private
+
+      # Update hosts on other VMs.
+      def sync_hosts!
+        env = @machine.env
+
+        # Gathers every _other_ machine in the vagrant environment which is
+        # running and has a hosts provider.
+        machines_to_provision = env.active_machines.map do |name, provider|
+          env.machine(name, provider)
+        end.select do |vm|
+          calling_machine = (vm.name.to_s == machine.name.to_s)
+          running = begin
+            vm.communicate.ready?
+          rescue Vagrant::Errors::VagrantError
+            # WinRM will raise an error if the VM isn't running instead of
+            # returning false (mitchellh/vagrant#6356).
+            false
+          end
+          has_hosts = vm.config.provisioners.any? {|p| p.type.intern == :hosts}
+
+          running && has_hosts && (not calling_machine)
+        end
+
+        machines_to_provision.each do |vm|
+          vm.ui.info "Updating hosts on: #{vm.name}"
+          vm.config.vm.provisioners.select {|p| p.type.intern == :hosts}.each do |p|
+            # Duplicate the hosts configuration.
+            hosts_config = @config.class.new.merge(p.config)
+            # Set sync_hosts to false to avoid recursion.
+            hosts_config.sync_hosts = false
+            hosts_config.finalize!
+
+            self.class.new(vm, hosts_config).provision
+          end
+        end
       end
 
     end

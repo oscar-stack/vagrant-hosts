@@ -10,6 +10,8 @@ module VagrantHosts
       attr_accessor :autoconfigure
       # @!attribute [rw] add_localhost_hostnames
       attr_accessor :add_localhost_hostnames
+      # @!attribute [rw] sync_hosts
+      attr_accessor :sync_hosts
 
       def initialize
         @hosts = []
@@ -20,6 +22,7 @@ module VagrantHosts
           vm_config.provision :hosts do |h_config|
             h_config.autoconfigure = attr(:autoconfigure) unless attr(:autoconfigure).nil?
             h_config.add_localhost_hostnames = attr(:add_localhost_hostnames) unless attr(:add_localhost_hostnames).nil?
+            h_config.sync_hosts = attr(:sync_hosts) unless attr(:sync_hosts).nil?
 
             @hosts.each do |(address, aliases)|
               h_config.add_host address, aliases

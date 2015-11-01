@@ -18,10 +18,18 @@ module VagrantHosts
     #     Default: `true`.
     attr_accessor :add_localhost_hostnames
 
+    # @!attribute sync_hosts
+    #   @return [TrueClass, FalseClass] When set to true, running the hosts
+    #     provisioner on this VM will update all other running machines that
+    #     use the hosts provisioner. This action will also occur on machine
+    #     destruction. Defaults to `false`.
+    attr_accessor :sync_hosts
+
     def initialize
       @hosts = []
       @autoconfigure = UNSET_VALUE
       @add_localhost_hostnames = UNSET_VALUE
+      @sync_hosts = UNSET_VALUE
     end
 
     # Register a host for entry
@@ -53,6 +61,8 @@ module VagrantHosts
       if @add_localhost_hostnames == UNSET_VALUE
         @add_localhost_hostnames = true
       end
+
+      @sync_hosts = false if @sync_hosts == UNSET_VALUE
     end
 
     # @param other [VagrantHosts::Config]
