@@ -1,0 +1,7 @@
+.bundle
+.ruby-version
+.yardoc
+/doc
+Gemfile.lock
+Gemfile.local
+*.gem
