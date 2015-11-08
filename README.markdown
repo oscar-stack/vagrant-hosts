@@ -115,6 +115,14 @@ Vagrant.configure('2') do |config|
 end
 ```
 
+Vagrant Commands
+----------------
+
+The `vagrant-hosts` plugin provides two Vagrant commands:
+
+  - `vagrant hosts list`: List private_network host info in /etc/hosts format
+  - `vagrant hosts puppetize`: List private_network host info as Puppet Host resources
+
 Supported Platforms
 -------------------
 

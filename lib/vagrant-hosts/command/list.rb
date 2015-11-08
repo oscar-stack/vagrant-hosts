@@ -3,6 +3,10 @@ class VagrantHosts::Command::List < Vagrant.plugin('2', :command)
   include VagrantHosts::Command::Helpers
   include VagrantHosts::Addresses
 
+  def self.synopsis
+    'List private_network host info in /etc/hosts format'
+  end
+
   def initialize(argv, env)
     @argv     = argv
     @env      = env

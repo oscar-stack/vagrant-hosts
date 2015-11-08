@@ -11,6 +11,10 @@ module VagrantHosts
     require 'vagrant-hosts/command/puppetize'
     require 'vagrant-hosts/command/list'
 
+    def self.synopsis
+      'Information about hostnames managed by the vagrant-hosts plugin'
+    end
+
     def initialize(argv, env)
       @argv     = argv
       @env      = env

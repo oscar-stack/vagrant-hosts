@@ -3,6 +3,10 @@ class VagrantHosts::Command::Puppetize < Vagrant.plugin('2', :command)
   include VagrantHosts::Command::Helpers
   include VagrantHosts::Addresses
 
+  def self.synopsis
+    'List private_network host info as Puppet Host resources'
+  end
+
   def initialize(argv, env)
     @argv     = argv
     @env      = env
