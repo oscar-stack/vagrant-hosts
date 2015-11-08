@@ -6,7 +6,33 @@ Manage vagrant guest local DNS resolution.
 [![Build Status](https://travis-ci.org/oscar-stack/vagrant-hosts.svg?branch=master)](https://travis-ci.org/oscar-stack/vagrant-hosts)
 
 Synopsis
---------
+========
+
+Provisioner Settings
+--------------------
+
+These settings are on a per provisioner basis. They configure the individual
+behaviors of each provisioner instance.
+
+  * `hosts`
+    * Description: An array of tuples containing:
+      - An IP address
+      - A list of hostnames match with that address.
+    * Default: `[]`
+  * `autoconfigure`
+    * Description: A boolean which controls whether hosts are pulled in from other machines.
+    * Default: `true` if hosts is empty, otherwise `false`.
+  * `add_localhost_hostnames`
+    * Description: A boolean which controls whether the hostname of the machine is added as an alias for `127.0.1.1`
+    * Default: `true`
+  * `sync_hosts`
+    * Description: A boolean which controls whether running the hosts provisioner causes an update on all other running machines.
+      This also happens during machine destruction.
+    * Default: `false`
+
+
+Example Usage
+-------------
 
 Manually specify addresses:
 
@@ -93,7 +119,8 @@ As of version 1.0.0 or later Vagrant 1.1 is required.
 
 Supported guests:
 
-  * Linux
+  * POSIX
+  * Windows
 
 Installation
 ------------
