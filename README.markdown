@@ -12,7 +12,7 @@ Manually specify addresses:
 
 ```ruby
 Vagrant.configure('2') do |config|
-  config.vm.box = "ubuntu-12.04-server-i386"
+  config.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
 
   config.vm.provision :hosts do |provisioner|
     # Add a single hostname
@@ -43,13 +43,13 @@ Autodetect internal network addresses and autoconfigure hosts:
 Vagrant.configure('2') do |config|
 
   config.vm.define :first do |node|
-    node.vm.box = "ubuntu-12.04-server-i386"
+    node.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
     node.vm.network :private_network, :ip => '10.20.1.2'
     node.vm.provision :hosts, :sync_hosts => true
   end
 
   config.vm.define :second do |node|
-    node.vm.box = "ubuntu-12.04-server-i386"
+    node.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
     node.vm.network :private_network, :ip => '10.20.1.3'
     node.vm.provision :hosts, :sync_hosts => true
   end
@@ -64,7 +64,7 @@ Use autodetection with manual entries
 Vagrant.configure('2') do |config|
 
   config.vm.define :first do |node|
-    node.vm.box = "ubuntu-12.04-server-i386"
+    node.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
     node.vm.network :private_network, :ip => '10.20.1.2'
     node.vm.provision :hosts do |provisioner|
       provisioner.autoconfigure = true
@@ -75,7 +75,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.define :second do |node|
-    node.vm.box = "ubuntu-12.04-server-i386"
+    node.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
     node.vm.network :private_network, :ip => '10.20.1.3'
     node.vm.provision :hosts do |provisioner|
       provisioner.autoconfigure = true
