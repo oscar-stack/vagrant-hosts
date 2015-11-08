@@ -58,9 +58,10 @@ module VagrantHosts
     # @param other [VagrantHosts::Config]
     # @return [VagrantHosts::Config] The merged results
     def merge(other)
-      super.tap do |result|
-        result.hosts += other.hosts
-      end
+      result = super
+      result.instance_variable_set(:@hosts, self.hosts.dup + other.hosts.dup)
+
+      result
     end
 
     def validate(machine)
