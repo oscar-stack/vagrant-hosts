@@ -3,6 +3,8 @@ vagrant-hosts
 
 Manage vagrant guest local DNS resolution.
 
+[![Build Status](https://travis-ci.org/oscar-stack/vagrant-hosts.svg?branch=master)](https://travis-ci.org/oscar-stack/vagrant-hosts)
+
 Synopsis
 --------
 

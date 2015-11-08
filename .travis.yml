@@ -1,0 +1,18 @@
+---
+language: ruby
+sudo: false
+before_install:
+  - gem install bundler --version $BUNDLER_VERSION
+install: bundle _${BUNDLER_VERSION}_ install --without development
+script: bundle _${BUNDLER_VERSION}_ exec rspec --color --format documentation
+notifications:
+  email: false
+rvm:
+  - 2.0.0
+env:
+  global:
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+  matrix:
+    - TEST_VAGRANT_VERSION=v1.6.5 BUNDLER_VERSION=1.6.9
+    - TEST_VAGRANT_VERSION=v1.7.4 BUNDLER_VERSION=1.10.5
+    - TEST_VAGRANT_VERSION=HEAD   BUNDLER_VERSION=1.10.5
