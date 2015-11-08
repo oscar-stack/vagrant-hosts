@@ -12,7 +12,7 @@ module VagrantHosts
     #                                   other vagrant machines
     attr_accessor :autoconfigure
 
-    # @!attribute autoconfigure
+    # @!attribute add_localhost_hostnames
     #   @return [TrueClass, FalseClass] A boolean indicating whether a
     #     `127.0.1.1` entry should be added mapping to the FQDN of the VM.
     #     Default: `true`.
