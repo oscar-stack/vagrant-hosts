@@ -1,6 +1,19 @@
 CHANGELOG
 =========
 
+2.6.0
+-----
+
+2015-11-08
+
+This is a backwards compatible feature release.
+
+  * (GH-17) Added a new `sync_hosts` option which triggers an update of all
+    hosts whenever one host is changed. This also occurs on VM destruction.
+
+  * Updated README with much missing documentation.
+
+
 2.5.0
 -----
 
