@@ -8,6 +8,9 @@ Manage vagrant guest local DNS resolution.
 Synopsis
 ========
 
+The `vagrant-hosts` plugin provides a `hosts` provisioner which assembles hosts file content based on explicit information and `private_network` settings. Dynamic sources of hostname info, such as DHCP or provider-specific SSH info are currently not considered.
+
+
 Provisioner Settings
 --------------------
 
