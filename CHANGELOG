@@ -1,6 +1,18 @@
 CHANGELOG
 =========
 
+2.6.1
+-----
+
+2015-11-09
+
+This is a backwards compatible bugfix release.
+
+  * (GH-53) Guard against errors that arise when sync_hosts encounters
+    machines that have been removedfrom the Vagrant file without being
+    destroyed.
+
+
 2.6.0
 -----
 
