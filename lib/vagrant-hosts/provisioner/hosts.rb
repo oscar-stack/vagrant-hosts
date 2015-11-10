@@ -1,8 +1,10 @@
 require 'vagrant'
+require 'vagrant-hosts/addresses'
 
 module VagrantHosts
   module Provisioner
     class Hosts < Vagrant.plugin('2', :provisioner)
+      include VagrantHosts::Addresses
 
       def provision
         @machine.guest.capability(:sync_hosts, @config)
@@ -21,9 +23,7 @@ module VagrantHosts
 
         # Gathers every _other_ machine in the vagrant environment which is
         # running and has a hosts provider.
-        machines_to_provision = env.active_machines.map do |name, provider|
-          env.machine(name, provider)
-        end.select do |vm|
+        machines_to_provision = all_machines(env).select do |vm|
           calling_machine = (vm.name.to_s == machine.name.to_s)
           running = begin
             vm.communicate.ready?
