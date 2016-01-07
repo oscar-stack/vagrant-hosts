@@ -1,6 +1,17 @@
 CHANGELOG
 =========
 
+2.6.2
+-----
+
+2016-01-07
+
+This is a backwards compatible bugfix release.
+
+  * (GH-54) Fix a bug in sync_hosts that could result in
+    "Unknown configuration section 'provisioners'" errors.
+
+
 2.6.1
 -----
 
