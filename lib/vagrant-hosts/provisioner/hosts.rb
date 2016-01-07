@@ -32,7 +32,7 @@ module VagrantHosts
             # returning false (mitchellh/vagrant#6356).
             false
           end
-          has_hosts = vm.config.provisioners.any? {|p| p.type.intern == :hosts}
+          has_hosts = vm.config.vm.provisioners.any? {|p| p.type.intern == :hosts}
 
           running && has_hosts && (not calling_machine)
         end
