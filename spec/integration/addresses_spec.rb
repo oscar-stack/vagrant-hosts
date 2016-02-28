@@ -1,5 +1,8 @@
 require 'spec_helper'
+
 require 'vagrant-hosts/addresses'
+require 'vagrant-hosts/config'
+
 
 describe 'Vagrant Integration: VagrantHosts::Addresses' do
   include_context 'vagrant-unit'
@@ -14,10 +17,29 @@ Vagrant.configure('2') do |config|
 
     node.vm.network :private_network, ip: '10.40.1.1'
     node.vm.network :private_network, ip: '10.40.1.3'
+
+    node.vm.provision 'hosts' do |p|
+      p.exports = {
+        'global' => [
+          ['@vagrant_private_networks', ['@vagrant_hostnames']]
+        ],
+      }
+    end
   end
 
   config.vm.define 'machine-b' do |node|
     node.vm.network :private_network, ip: '10.40.1.2'
+
+    node.vm.provision 'hosts' do |p|
+      p.exports = {
+        'global' => [
+          ['@vagrant_private_networks', ['@vagrant_hostnames']],
+        ],
+        'ssh' => [
+          ['@vagrant_ssh', ['@vagrant_hostnames']],
+        ],
+      }
+    end
   end
 end
 EOF
@@ -51,6 +73,9 @@ EOF
       [:'machine-a', :dummy],
       [:'machine-b', :dummy],
     ])
+
+    # Give Machine B a SSH address.
+    allow(machine_b).to receive(:ssh_info).and_return({:host => '10.40.1.4'})
   end
 
   describe '#vagrant_hosts' do
@@ -60,6 +85,19 @@ EOF
         ['10.40.1.3', ['machine-a.testvm', 'machine-a']],
         ['10.40.1.2', ['machine-b']],
       )
+    end
+  end
+
+  describe '#collect_imports' do
+    it 'returns imports from other machines' do
+      config = VagrantHosts::Config.new
+      config.imports = ['global', 'ssh']
+      config.finalize!
+
+      expect(subject.collect_imports(machine_a, config)).to eq([
+        [IPAddr.new('10.40.1.2'), ['machine-b']],
+        [IPAddr.new('10.40.1.4'), ['machine-b']],
+      ])
     end
   end
 end

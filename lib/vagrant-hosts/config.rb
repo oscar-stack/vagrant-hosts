@@ -25,8 +25,22 @@ module VagrantHosts
     #     destruction. Defaults to `false`.
     attr_accessor :sync_hosts
 
+    # @!attribute [rw] exports
+    #   @return [Hash{String => Array<Array<String, Array<String>>>}]
+    #     A hash containing named lists of `[address, [aliases]]` tuples
+    #     that are exported by this VM. These exports can be collected by other
+    #     VMs using the {#imports} option.
+    attr_accessor :exports
+
+    # @!attribute [rw] imports
+    #   @return [Array<String>]
+    #     A list of exports to collect from other VMs.
+    attr_accessor :imports
+
     def initialize
       @hosts = []
+      @exports = {}
+      @imports = []
       @autoconfigure = UNSET_VALUE
       @add_localhost_hostnames = UNSET_VALUE
       @sync_hosts = UNSET_VALUE
@@ -51,7 +65,7 @@ module VagrantHosts
 
     def finalize!
       if @autoconfigure == UNSET_VALUE
-       if  @hosts.empty?
+       if  @hosts.empty? && @imports.empty?
           @autoconfigure = true
         else
           @autoconfigure = false
