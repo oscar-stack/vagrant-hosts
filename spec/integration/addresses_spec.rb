@@ -100,4 +100,16 @@ EOF
       ])
     end
   end
+
+  describe '#all_hosts' do
+    it 'resolves special addresses and aliases' do
+      config = VagrantHosts::Config.new
+      config.add_host '@vagrant_private_networks', ['@vagrant_hostnames']
+      config.finalize!
+
+      expect(subject.all_hosts(config)).to include(
+        [IPAddr.new('10.40.1.1'), ['machine-a.testvm', 'machine-a']],
+      )
+    end
+  end
 end

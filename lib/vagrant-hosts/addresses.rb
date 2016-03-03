@@ -17,7 +17,7 @@ module VagrantHosts::Addresses
       all_hosts += collect_imports(@machine, config)
     end
 
-    all_hosts += config.hosts
+    all_hosts += resolve_host_entries(config.hosts, @machine)
 
     all_hosts.uniq
   end
