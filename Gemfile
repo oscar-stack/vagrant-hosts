@@ -20,8 +20,8 @@ group :test do
     gem 'vagrant', :github => 'mitchellh/vagrant', :tag => ENV['TEST_VAGRANT_VERSION']
   end
 
-  # Pinned on 12/10/2014. Compatible with Vagrant 1.5.x, 1.6.x and 1.7.x.
-  gem 'vagrant-spec', :github => 'mitchellh/vagrant-spec', :ref => '1df5a3a'
+  # Pinned on 2/21/2016. Compatible with Vagrant 1.6.x, 1.7.x and 1.8.x.
+  gem 'vagrant-spec', :github => 'mitchellh/vagrant-spec', :ref => '9bba7e1'
 end
 
 eval_gemfile "#{__FILE__}.local" if File.exists? "#{__FILE__}.local"
