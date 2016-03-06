@@ -32,14 +32,18 @@ module VagrantHosts
             # returning false (mitchellh/vagrant#6356).
             false
           end
-          has_hosts = vm.config.vm.provisioners.any? {|p| p.type.intern == :hosts}
+          has_hosts = if Vagrant::VERSION < '1.7'
+            vm.config.vm.provisioners.any? {|p| p.name.intern == :hosts}
+          else
+            vm.config.vm.provisioners.any? {|p| p.type.intern == :hosts}
+          end
 
           running && has_hosts && (not calling_machine)
         end
 
         machines_to_provision.each do |vm|
           vm.ui.info "Updating hosts on: #{vm.name}"
-          vm.config.vm.provisioners.select {|p| p.type.intern == :hosts}.each do |p|
+          host_provisioners(vm).each do |p|
             # Duplicate the hosts configuration.
             hosts_config = @config.class.new.merge(p.config)
             # Set sync_hosts to false to avoid recursion.

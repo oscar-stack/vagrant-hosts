@@ -79,9 +79,7 @@ module VagrantHosts::Addresses
     all_machines(env).each do |m|
       next if m.name == machine.name
 
-      m.config.vm.provisioners.each do |p|
-        next unless (p.type.intern == :hosts)
-
+      host_provisioners(m).each do |p|
         imports.each do |k|
           next unless p.config.exports.has_key?(k)
           hosts.concat resolve_host_entries(p.config.exports[k], m)
@@ -210,4 +208,15 @@ module VagrantHosts::Addresses
     end.compact
   end
 
+  # NOTE: This method exists for compatibility with Vagrant 1.6 and earlier.
+  # Remove it once support for these versions is dropped.
+  def host_provisioners(machine)
+    machine.config.vm.provisioners.select do |p|
+      if Vagrant::VERSION < '1.7'
+        p.name.intern == :hosts
+      else
+        p.type.intern == :hosts
+      end
+    end
+  end
 end
