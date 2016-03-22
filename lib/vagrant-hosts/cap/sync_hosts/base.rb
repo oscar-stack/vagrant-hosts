@@ -14,23 +14,7 @@ class VagrantHosts::Cap::SyncHosts::Base
   end
 
   def sync!
-    hostname = @machine.config.vm.hostname || @machine.name.to_s
-    change_host_name(hostname)
-
     # call to method not implemented by abstract base class
     update_hosts
   end
-
-  private
-
-  # @param name [String] The new hostname to apply on the guest
-  def change_host_name(name)
-    case Vagrant::VERSION
-    when /^1\.1/
-      @machine.guest.change_host_name(name)
-    else
-      @machine.guest.capability(:change_host_name, name)
-    end
-  end
-
 end
