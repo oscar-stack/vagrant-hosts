@@ -137,8 +137,8 @@ module VagrantHosts::Addresses
         opts[:ip]
       end.compact
     when '@vagrant_ssh'
-      if machine.ssh_info
-        machine.ssh_info[:host]
+      if (info = machine.ssh_info)
+        info[:host]
       else
         []
       end
