@@ -3,6 +3,12 @@ require 'ipaddr'
 
 module VagrantHosts::Addresses
 
+  # Cache for networking data
+  #
+  # @return [Hash{String => Hash{String => String}}]
+  # @private
+  CACHE ||= {}
+
   private
 
   def all_hosts(config)
@@ -130,20 +136,32 @@ module VagrantHosts::Addresses
   #
   # @return [Array<String>] A list of addresses.
   def resolve_addresses(address, machine)
-    ips = case address
-    when '@vagrant_private_networks'
-      machine.config.vm.networks.map do |(net_type, opts)|
-        next unless net_type == :private_network
-        opts[:ip]
-      end.compact
-    when '@vagrant_ssh'
-      if (info = machine.ssh_info)
-        info[:host]
-      else
-        []
-      end
+    # Some network addresses, such as ssh_info, can be expensive to
+    # look up from cloud environments such as AWS, vSphere and OpenStack.
+    # So, we cache these special keys.
+    if CACHE.key?(machine.name) && CACHE[machine.name].key?(address)
+      ips = CACHE[machine.name][address]
     else
-      address
+      ips = case address
+      when '@vagrant_private_networks'
+        machine.config.vm.networks.map do |(net_type, opts)|
+          next unless net_type == :private_network
+          opts[:ip]
+        end.compact
+      when '@vagrant_ssh'
+        if (info = machine.ssh_info)
+          info[:host]
+        else
+          []
+        end
+      else
+        address
+      end
+
+      if address.start_with?('@')
+        CACHE[machine.name] ||= {}
+        CACHE[machine.name][address] = ips
+      end
     end
 
     Array(ips)
