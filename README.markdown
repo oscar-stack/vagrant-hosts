@@ -42,10 +42,6 @@ behaviors of each provisioner instance.
     * Description: A boolean which controls whether running the hosts provisioner causes an update on all other running machines.
       This also happens during machine destruction.
     * Default: `false`
-  * `sync_hosts`
-    * Description: A boolean which controls whether running the hosts provisioner causes an update on all other running machines.
-      This also happens during machine destruction.
-    * Default: `false`
 
 ### Special Keys
 
