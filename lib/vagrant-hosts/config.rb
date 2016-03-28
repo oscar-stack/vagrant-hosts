@@ -30,11 +30,15 @@ module VagrantHosts
     #     A hash containing named lists of `[address, [aliases]]` tuples
     #     that are exported by this VM. These exports can be collected by other
     #     VMs using the {#imports} option.
+    #
+    #   @since 2.7.0
     attr_accessor :exports
 
     # @!attribute [rw] imports
     #   @return [Array<String>]
     #     A list of exports to collect from other VMs.
+    #
+    #   @since 2.7.0
     attr_accessor :imports
 
     def initialize

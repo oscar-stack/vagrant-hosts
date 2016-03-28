@@ -1,6 +1,8 @@
 require 'config_builder/model'
 
 # Integration with ConfigBuilder 1.x and newer
+#
+# @since 2.7.0
 module VagrantHosts
   module ConfigBuilder
     class Model < ::ConfigBuilder::Model::Provisioner::Base
@@ -13,7 +15,9 @@ module VagrantHosts
       def_model_attribute :add_localhost_hostnames
       # @!attribute [rw] sync_hosts
       def_model_attribute :sync_hosts
+      # @!attribute [rw] exports
       def_model_attribute :exports
+      # @!attribute [rw] exports
       def_model_attribute :imports
 
       def initialize

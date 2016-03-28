@@ -7,6 +7,8 @@ module VagrantHosts::Addresses
   #
   # @return [Hash{String => Hash{String => String}}]
   # @private
+  #
+  # @since 2.7.0
   CACHE ||= {}
 
   private
@@ -75,6 +77,8 @@ module VagrantHosts::Addresses
   #
   # @return [Array<Array<IPAddr, Array<String>>>] A list of address, alias
   #   tuples.
+  #
+  # @since 2.7.0
   def collect_imports(machine, config)
     env = machine.env
     imports = config.imports
@@ -110,6 +114,8 @@ module VagrantHosts::Addresses
   # @raise [Resolv::ResolvError] When a hostname cannot be resolved to an IP.
   #
   # @return [Array<IPAddr, Array<String>>]
+  #
+  # @since 2.7.0
   def resolve_host_entries(entries, machine)
     entries.flat_map do |(address, aliases)|
       names = resolve_aliases(aliases, machine)
@@ -135,6 +141,8 @@ module VagrantHosts::Addresses
   #   addresses.
   #
   # @return [Array<String>] A list of addresses.
+  #
+  # @since 2.7.0
   def resolve_addresses(address, machine)
     # Some network addresses, such as ssh_info, can be expensive to
     # look up from cloud environments such as AWS, vSphere and OpenStack.
@@ -179,6 +187,8 @@ module VagrantHosts::Addresses
   # @raise [Resolv::ResolvError] When a hostname cannot be resolved to an IP.
   #
   # @return [IPAddr] An IP address.
+  #
+  # @since 2.7.0
   def resolve_ip(address)
     ip = begin
       IPAddr.new(address)
@@ -204,6 +214,8 @@ module VagrantHosts::Addresses
   #   aliases.
   #
   # @return [Array<String>] A list of hostnames.
+  #
+  # @since 2.7.0
   def resolve_aliases(aliases, machine)
     aliases.flat_map do |a|
       case a
