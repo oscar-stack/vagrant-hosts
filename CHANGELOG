@@ -1,6 +1,25 @@
 CHANGELOG
 =========
 
+2.7.0
+-----
+
+2016-03-28
+
+This is a backwards compatible feature release.
+
+  * (GH-58) Added a flexible import/export system for sharing host entries among
+    groups of VMs.
+
+  * (GH-56) Added a special value, `@vagrant_ssh`, for host entries that will
+    be replaced with the address Vagrant uses to SSH into the VM.
+
+  * (GH-59) Made sync_hosts more friendly to VMs that have requiretty turned on.
+
+  * (GH-61) Fixed a bug where config_builder 0.x couldn't set the hosts array
+    on the hosts provisioner.
+
+
 2.6.2
 -----
 
