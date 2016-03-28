@@ -20,10 +20,6 @@ module VagrantHosts
       # @!attribute [rw] exports
       def_model_attribute :imports
 
-      def initialize
-        @hosts = []
-      end
-
       # @private
       def configure_hosts(config, val)
         val.each do |(address, aliases)|

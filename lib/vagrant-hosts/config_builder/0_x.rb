@@ -15,7 +15,9 @@ module VagrantHosts
       attr_accessor :sync_hosts
 
       def initialize
-        @hosts = []
+        @defaults = {
+          :hosts => [],
+        }
       end
 
       def to_proc
@@ -25,7 +27,7 @@ module VagrantHosts
             h_config.add_localhost_hostnames = attr(:add_localhost_hostnames) unless attr(:add_localhost_hostnames).nil?
             h_config.sync_hosts = attr(:sync_hosts) unless attr(:sync_hosts).nil?
 
-            @hosts.each do |(address, aliases)|
+            attr(:hosts).each do |(address, aliases)|
               h_config.add_host address, aliases
             end
           end
