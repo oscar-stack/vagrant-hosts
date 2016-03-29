@@ -14,6 +14,12 @@ class VagrantHosts::Cap::SyncHosts::Base
   end
 
   def sync!
+    # This ensures that a default hostname is created from the macine name
+    # if the VM wasn't configured with a hostname.
+    #
+    # FIXME: Write tests for this behavior.
+    # TODO: Move this behavior into a config block on the hosts provisioner
+    # so that this capability can remain focused on updating /etc/hosts.
     hostname = @machine.config.vm.hostname || @machine.name.to_s
     change_host_name(hostname)
 
