@@ -1,6 +1,17 @@
 CHANGELOG
 =========
 
+2.7.1
+-----
+
+2016-03-29
+
+This is a backwards compatible bugfix release.
+
+  * (GH-63) Fix a regression where vagrant-hosts 2.7.0 no longer set a default
+    hostname generated from the machine name.
+
+
 2.7.0
 -----
 
