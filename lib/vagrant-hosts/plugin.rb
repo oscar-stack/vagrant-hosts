@@ -34,6 +34,19 @@ class VagrantHosts::Plugin < Vagrant.plugin(2)
     VagrantHosts::Cap::SyncHosts::Windows
   end
 
+
+  [:darwin, :linux, :solaris, :solaris11].each do |os|
+    guest_capability(os, 'network_facts') do
+      require_relative 'cap'
+      VagrantHosts::Cap::Facts::POSIX
+    end
+  end
+
+  guest_capability(:windows, 'network_facts') do
+    require_relative 'cap'
+    VagrantHosts::Cap::Facts::Windows
+  end
+
   command(:hosts) do
     require_relative 'command'
     VagrantHosts::Command
