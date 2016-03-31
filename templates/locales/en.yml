@@ -1,8 +1,3 @@
 ---
 en:
-  vagrant_hosts:
-    cap:
-      sync_hosts:
-        unknown_version: |-
-          %{vagrant_version} isn't a recognized Vagrant version, vagrant-hosts can't reliably
-          detect the `change_host_name` method.
+  vagrant_hosts: {}
