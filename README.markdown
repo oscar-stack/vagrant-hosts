@@ -21,7 +21,7 @@ behaviors of each provisioner instance.
     * Description: An array of tuples containing:
       - An IP address
       - A list of hostnames match with that address.
-      These entries may use special eys as described in the next section.
+      These entries may use special keys as described in the next section.
     * Default: `[]`
   * `exports`
     * Description: A hash containing named lists of `[address, [aliases]]`
@@ -53,6 +53,9 @@ For each component, there are some special keys defined that will be replaced by
 data determined from the VM.
 
 For `address`, the following special keys may be used:
+
+  - `@facter_ipaddress`: Expands to the IPv4 address assigned to the
+    default network interface of the guest VM.
 
   - `@vagrant_private_networks`: Expands to create one host entry with the given
     `aliases` for each private network attached to a VM that has an explicitly

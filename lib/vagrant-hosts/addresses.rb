@@ -162,6 +162,8 @@ module VagrantHosts::Addresses
         else
           []
         end
+      when '@facter_ipaddress'
+        machine.guest.capability(:network_facts)['networking']['ip']
       else
         address
       end
