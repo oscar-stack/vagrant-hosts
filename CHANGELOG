@@ -1,6 +1,18 @@
 CHANGELOG
 =========
 
+2.8.0
+-----
+
+2016-04-18
+
+This is a backwards compatible feature release.
+
+  * (GH-56) Added a special value, `@facter_ipaddress`, for host entries that
+    will be replaced with the IPv4 address assigned to the default
+    network interface.
+
+
 2.7.1
 -----
 
