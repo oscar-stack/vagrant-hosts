@@ -1,3 +1,6 @@
 ---
 en:
-  vagrant_hosts: {}
+  vagrant_hosts:
+    errors:
+      unresolvable_hostname: |-
+        The hostname, %{address}, was not a valid IP address or resolvable hostname.

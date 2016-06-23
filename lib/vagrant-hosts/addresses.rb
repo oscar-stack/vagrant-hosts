@@ -1,5 +1,7 @@
-require 'resolv'
 require 'ipaddr'
+require 'socket' # For Addrinfo
+
+require 'vagrant/errors'
 
 module VagrantHosts::Addresses
 
@@ -10,6 +12,10 @@ module VagrantHosts::Addresses
   #
   # @since 2.7.0
   CACHE ||= {}
+
+  class UnresolvableHostname < ::Vagrant::Errors::VagrantError
+    error_key(:unresolvable_hostname, 'vagrant_hosts.errors')
+  end
 
   private
 
@@ -195,8 +201,23 @@ module VagrantHosts::Addresses
     ip = begin
       IPAddr.new(address)
     rescue IPAddr::InvalidAddressError
-      # Wasn't an IP address. Resolve it. The AWS provider does this.
-      IPAddr.new(Resolv.getaddress(address))
+      nil
+    end
+
+    ip ||= begin
+      # Wasn't an IP address. Resolve it. The "@vagrant_ssh" returns a
+      # hostname instead of IP when the AWS provider is in use.
+      #
+      # NOTE: Name resolution is done using Ruby's Addrinfo instead of Resolv
+      # as Addrinfo always uses the system resolver library and thus picks up
+      # platform-specific behavior such as the OS X /etc/resolver/ directory.
+      IPAddr.new(Addrinfo.ip(address).ip_address)
+    rescue IPAddr::InvalidAddressError, SocketError
+      nil
+    end
+
+    if ip.nil?
+      raise UnresolvableHostname, address: address
     end
 
     ip
