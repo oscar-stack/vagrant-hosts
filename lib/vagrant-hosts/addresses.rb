@@ -190,9 +190,8 @@ module VagrantHosts::Addresses
   #
   # @param address [String] A string that might be an IP address or a hostname.
   #
-  # @raise [IPAddr::InvalidAddressError] Raised when an invalid address is
-  #   supplied.
-  # @raise [Resolv::ResolvError] When a hostname cannot be resolved to an IP.
+  # @raise [VagrantHosts::Addresses::UnresolvableHostname] If `address` is a
+  #   maformed IP address or unresolvable hostname.
   #
   # @return [IPAddr] An IP address.
   #
