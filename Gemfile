@@ -18,6 +18,9 @@ group :test do
     gem 'vagrant', :github => 'mitchellh/vagrant', :branch => 'master'
   else
     gem 'vagrant', :github => 'mitchellh/vagrant', :tag => ENV['TEST_VAGRANT_VERSION']
+    # FIXME: Hack to allow Vagrant v1.6.5 to install for tests. Remove when
+    # support for 1.6.5 is dropped.
+    gem 'rack', '< 2'
   end
 
   # Pinned on 2/21/2016. Compatible with Vagrant 1.6.x, 1.7.x and 1.8.x.
