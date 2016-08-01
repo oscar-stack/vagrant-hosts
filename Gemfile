@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ENV['TEST_VAGRANT_VERSION'] ||= 'v1.8.4'
+ENV['TEST_VAGRANT_VERSION'] ||= 'v1.8.5'
 
 # Wrapping gemspec in the :plugins group causes Vagrant 1.5 and newer to
 # automagically load this plugin during acceptance tests.
