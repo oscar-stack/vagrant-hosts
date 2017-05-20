@@ -12,9 +12,9 @@ Gem::Specification.new do |gem|
     Manage static DNS entries and configuration for Vagrant guests.
   EOD
 
-  gem.authors  = 'Adrien Thebo'
-  gem.email    = 'adrien@somethingsinistral.net'
-  gem.homepage = 'https://github.com/adrienthebo/vagrant-hosts'
+  gem.authors  = ['Adrien Thebo', 'Charlie Sharpsteen']
+  gem.email    = ['adrien@somethingsinistral.net', 'source@sharpsteen.net']
+  gem.homepage = 'https://github.com/oscar-stack/vagrant-hosts'
 
   gem.has_rdoc = true
   gem.license  = 'Apache 2.0'
