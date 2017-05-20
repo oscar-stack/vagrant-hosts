@@ -52,6 +52,12 @@ class VagrantHosts::Plugin < Vagrant.plugin(2)
     VagrantHosts::Command
   end
 
+  # Internal action hooks
+  action_hook('Vagrant Hosts: vagrant version check', :environment_load) do |hook|
+    require 'vagrant-hosts/action/version_check'
+    hook.prepend VagrantHosts::Action::VersionCheck
+  end
+
   # ConfigBuilder tie-ins
 
   def self.config_builder_hook
