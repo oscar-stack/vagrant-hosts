@@ -98,7 +98,16 @@ module VagrantHosts::Addresses
       host_provisioners(m).each do |p|
         imports.each do |k|
           next unless p.config.exports.has_key?(k)
-          hosts.concat resolve_host_entries(p.config.exports[k], m)
+          begin
+            hosts.concat resolve_host_entries(p.config.exports[k], m)
+          rescue Vagrant::Errors::VagrantError => e
+            machine.ui.error I18n.t(
+              'vagrant_hosts.errors.collection_failed',
+              :host   => m.name.to_s,
+              :error_class => e.class,
+              :message => e.message
+            )
+          end
         end
       end
     end

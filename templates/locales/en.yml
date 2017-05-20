@@ -10,3 +10,11 @@ en:
     errors:
       unresolvable_hostname: |-
         The hostname, %{address}, was not a valid IP address or resolvable hostname.
+      collection_failed: |-
+        An error of type %{error_class} occurred while collecting
+        host info from %{host}:
+
+        %{message}
+
+        If this was caused by a transient condition, then the next
+        sync should succeed.
