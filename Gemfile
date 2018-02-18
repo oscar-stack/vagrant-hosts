@@ -24,9 +24,6 @@ group :test do
     vagrant_version = Gem::Version.new(vagrant_branch.sub(/^v/, ''))
     gem 'vagrant', :git => 'https://github.com/hashicorp/vagrant.git',
       :tag => vagrant_branch
-    # FIXME: Hack to allow Vagrant v1.6.5 to install for tests. Remove when
-    # support for 1.6.5 is dropped.
-    gem 'rack', '< 2'
   end
 
   if vagrant_branch.match(/head/i) || (vagrant_version > Gem::Version.new('1.9.3'))
