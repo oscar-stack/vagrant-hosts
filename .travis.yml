@@ -2,6 +2,12 @@
 language: ruby
 sudo: false
 before_install:
+  # TODO: Remove along with all BUNDLER_VERSION hackery once support for
+  # Vagrant < 1.9 is dropped.
+  #
+  # Travis has taken to installing Bundler as a "default" gem which locks
+  # it down and makes it extremely frustrating to use a different version.
+  - "find /home/travis/.rvm/rubies -wholename '*default/bundler-*.gemspec' -delete"
   - gem install bundler --version $BUNDLER_VERSION
 install: bundle _${BUNDLER_VERSION}_ install --without development
 script: bundle _${BUNDLER_VERSION}_ exec rspec --color --format documentation
