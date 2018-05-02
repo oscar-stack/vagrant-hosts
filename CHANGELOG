@@ -1,6 +1,30 @@
 CHANGELOG
 =========
 
+2.8.1
+-----
+
+2018-05-02
+
+This is a backwards compatible bugfix release.
+
+  * Added test coverage for Vagrant 1.9 and 2.0
+
+  * Deprecated support for vagrant versions earlier than 1.8. These will be
+    removed in the next major release.
+
+  * Hostnames are now resolved to IP addresses using the Addrinfo library
+    which wraps the system resolver. Previously the Resolv library was used
+    which is a pure-Ruby DNS resolver that did not pick up system-specific
+    configuration or behavior.
+
+  * Host synchronization is supported for FreeBSD, thanks to Brian Shumate.
+
+  * Errors that occur during host sync are now trapped and logged. This
+    means that an unreachable host will no longer block other operations
+    like `vagrant destroy`.
+
+
 2.8.0
 -----
 
