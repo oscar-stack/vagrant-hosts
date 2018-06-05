@@ -24,20 +24,49 @@ describe VagrantHosts::Config do
       expect(errors['Vagrant Hosts']).to eq []
     end
 
-    it 'can be merged' do
-      subject.add_host '127.0.0.1', ['local.server']
-      subject.finalize!
+    context 'when merging' do
+      let(:other) { described_class.new }
 
-      other = described_class.new
-      other.add_host '10.0.20.1', ['other.server']
-      other.finalize!
+      it 'combines hosts arrays' do
+        subject.add_host '127.0.0.1', ['local.server']
+        subject.finalize!
 
-      result = subject.merge(other)
+        other.add_host '127.0.0.1', ['some-alias']
+        other.add_host '10.0.20.1', ['other.server']
+        other.finalize!
 
-      expect(result.hosts).to eq [
-        ["127.0.0.1", ["local.server"]],
-        ["10.0.20.1", ["other.server"]]]
+        result = subject.merge(other)
+
+        expect(result.hosts).to eq [['127.0.0.1', ['local.server', 'some-alias']],
+                                    ['10.0.20.1', ['other.server']]]
+      end
+
+      it 'combines import arrays' do
+        subject.imports = ['foo', 'baz']
+        subject.finalize!
+
+        other.imports = ['foo', 'bar']
+        other.finalize!
+
+        result = subject.merge(other)
+
+        expect(result.imports).to eq ['foo', 'baz', 'bar']
+      end
+
+      it 'merges export hashes' do
+        subject.exports = {global: [["127.0.0.1", ["local.server"]]]}
+        subject.finalize!
+
+        other.exports = {global: [["127.0.0.1", ["test.server"]]],
+                         some_provider: [["127.0.0.1", ["some-alias"]]]}
+        other.finalize!
+
+        result = subject.merge(other)
+
+        expect(result.exports).to eq({global: [["127.0.0.1",
+                                                ["local.server", "test.server"]]],
+                                      some_provider: [["127.0.0.1", ["some-alias"]]]})
+      end
     end
-
   end
 end
