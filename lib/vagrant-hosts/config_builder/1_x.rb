@@ -21,6 +21,34 @@ module VagrantHosts
       def_model_attribute :imports
 
       # @private
+      def configure_exports(config, val)
+        val.each do |k, v|
+          config.exports[k] ||= []
+          config.exports[k] += v
+        end
+
+        config.exports.each do |k, v|
+          new_value = {}
+          v.each do |ip, hostnames|
+            if new_value.has_key?(ip)
+              new_value[ip] += hostnames
+            else
+              new_value[ip] = hostnames.dup
+            end
+          end
+
+          new_value.each {|_, v| v.uniq!}
+          config.exports[k] = new_value
+        end
+      end
+
+      # @private
+      def configure_imports(config, val)
+        config.imports += val
+        config.imports.uniq!
+      end
+
+      # @private
       def configure_hosts(config, val)
         val.each do |(address, aliases)|
           config.add_host(address, aliases)
