@@ -88,15 +88,7 @@ module VagrantHosts
     def merge(other)
       result = super
 
-      new_hosts = {}
-      (self.hosts.dup + other.hosts.dup).each do |ip, hostnames|
-        if new_hosts.key?(ip)
-          new_hosts[ip] += hostnames
-        else
-          new_hosts[ip] = hostnames
-        end
-      end
-      new_hosts.each {|_, v| v.uniq!}
+      new_hosts = (self.hosts.dup + other.hosts.dup).uniq
       result.instance_variable_set(:@hosts, new_hosts.to_a)
 
       result.imports = (self.imports.dup + other.imports.dup).uniq
@@ -107,22 +99,6 @@ module VagrantHosts
           result.exports[k] ||= []
           result.exports[k] += v.dup
         end
-      end
-
-      # Turn duplicate entries for a single IP address into aliases.
-      result.exports.each do |k, v|
-        new_value = {}
-        v.each do |ip, hostnames|
-          if new_value.key?(ip)
-            new_value[ip] += hostnames
-          else
-            new_value[ip] = hostnames
-          end
-        end
-
-        new_value.each {|_, v| v.uniq!}
-
-        result.exports[k] = new_value.to_a
       end
 
       result

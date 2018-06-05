@@ -37,7 +37,8 @@ describe VagrantHosts::Config do
 
         result = subject.merge(other)
 
-        expect(result.hosts).to eq [['127.0.0.1', ['local.server', 'some-alias']],
+        expect(result.hosts).to eq [['127.0.0.1', ['local.server']],
+                                    ['127.0.0.1', ['some-alias']],
                                     ['10.0.20.1', ['other.server']]]
       end
 
@@ -63,8 +64,8 @@ describe VagrantHosts::Config do
 
         result = subject.merge(other)
 
-        expect(result.exports).to eq({global: [["127.0.0.1",
-                                                ["local.server", "test.server"]]],
+        expect(result.exports).to eq({global: [['127.0.0.1', ['local.server']],
+                                               ['127.0.0.1', ['test.server']]],
                                       some_provider: [["127.0.0.1", ["some-alias"]]]})
       end
     end
