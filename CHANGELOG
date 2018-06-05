@@ -1,6 +1,20 @@
 CHANGELOG
 =========
 
+2.8.2
+-----
+
+2018-06-05
+
+This is a backwards compatible bugfix release.
+
+  * The `exports` and `imports` attributes of the hosts provisioner now
+    properly merge when a provisioner with the same name is definied in
+    multiple scopes (e.g. global, per-vm, per-provider).
+
+  * Added test coverage for Vagrant 2.1.
+
+
 2.8.1
 -----
 
