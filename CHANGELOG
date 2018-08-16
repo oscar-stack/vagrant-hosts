@@ -4,6 +4,17 @@ CHANGELOG
 2.8.2
 -----
 
+2018-08-16
+
+This is a backwards compatible bugfix release.
+
+  * Fixed a "undefined method 'split' for nil" error with get_default_iface
+    that affects Vagrant 1.9 and newer.
+
+
+2.8.2
+-----
+
 2018-06-05
 
 This is a backwards compatible bugfix release.
