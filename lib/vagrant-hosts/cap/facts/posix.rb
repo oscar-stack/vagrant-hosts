@@ -41,4 +41,24 @@ class VagrantHosts::Cap::Facts::POSIX < VagrantHosts::Cap::Facts::Base
 
     default.split.last.chomp
   end
+
+  private
+
+  def sudo(cmd)
+    stdout = ''
+    stderr = ''
+
+    # FIXME: The chomp operations below smell like cargo culting. I have no
+    #        idea why we do it and it breaks on WinRM 2.x which uses PSRP
+    #        instead of routing though the CMD shell.
+    retval = machine.communicate.sudo(cmd) do |type, data|
+      if type == :stderr
+        stderr << data.chomp
+      else
+        stdout << data.chomp
+      end
+    end
+
+    {:stdout => stdout, :stderr => stderr, :retval => retval}
+  end
 end

@@ -21,23 +21,4 @@ class VagrantHosts::Cap::Facts::Base
   def load_facts
     raise NotImplementedError
   end
-
-  private
-
-  # TODO: Split this out into a shared module.
-  def sudo(cmd)
-    stdout = ''
-    stderr = ''
-
-    retval = machine.communicate.sudo(cmd) do |type, data|
-      if type == :stderr
-        stderr << data.chomp
-      else
-        stdout << data.chomp
-      end
-    end
-
-    {:stdout => stdout, :stderr => stderr, :retval => retval}
-  end
-
 end

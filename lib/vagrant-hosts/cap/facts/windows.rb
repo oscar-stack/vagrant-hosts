@@ -39,4 +39,22 @@ class VagrantHosts::Cap::Facts::Windows < VagrantHosts::Cap::Facts::Base
     default.split[-2].chomp
   end
 
+  private
+
+  # FIXME: de-duplicate with posix implementation after figuring out what
+  #        happens to newlines.
+  def sudo(cmd)
+    stdout = ''
+    stderr = ''
+
+    retval = machine.communicate.sudo(cmd) do |type, data|
+      if type == :stderr
+        stderr << data
+      else
+        stdout << data
+      end
+    end
+
+    {:stdout => stdout, :stderr => stderr, :retval => retval}
+  end
 end
