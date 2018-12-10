@@ -19,6 +19,8 @@ module VagrantHosts
       def_model_attribute :exports
       # @!attribute [rw] exports
       def_model_attribute :imports
+      # @!attribute [rw] change_hostname
+      def_model_attribute :change_hostname
 
       # @private
       def configure_exports(config, val)

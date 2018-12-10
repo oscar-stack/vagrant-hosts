@@ -20,8 +20,10 @@ class VagrantHosts::Cap::SyncHosts::Base
     # FIXME: Write tests for this behavior.
     # TODO: Move this behavior into a config block on the hosts provisioner
     # so that this capability can remain focused on updating /etc/hosts.
-    hostname = @machine.config.vm.hostname || @machine.name.to_s
-    change_host_name(hostname)
+    if @config.change_hostname
+      hostname = @machine.config.vm.hostname || @machine.name.to_s
+      change_host_name(hostname)
+    end
 
     # call to method not implemented by abstract base class
     update_hosts
