@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 require 'rubygems/version'
 
-vagrant_branch = ENV['TEST_VAGRANT_VERSION'] || 'v2.1.2'
+vagrant_branch = ENV['TEST_VAGRANT_VERSION'] || 'v2.2.2'
 vagrant_version = nil
 
 # Wrapping gemspec in the :plugins group causes Vagrant 1.5 and newer to
