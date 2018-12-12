@@ -16,7 +16,6 @@ Gem::Specification.new do |gem|
   gem.email    = ['adrien@somethingsinistral.net', 'source@sharpsteen.net']
   gem.homepage = 'https://github.com/oscar-stack/vagrant-hosts'
 
-  gem.has_rdoc = true
   gem.license  = 'Apache 2.0'
 
   gem.files        = %x{git ls-files -z}.split("\0")
