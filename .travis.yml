@@ -27,7 +27,7 @@ matrix:
     - rvm: 2.4.4
       env: TEST_VAGRANT_VERSION=v2.0.4 BUNDLER_VERSION=1.16.1
     - rvm: 2.4.4
-      env: TEST_VAGRANT_VERSION=v2.1.2 BUNDLER_VERSION=1.16.1
+      env: TEST_VAGRANT_VERSION=v2.1.5 BUNDLER_VERSION=1.16.1
     - rvm: 2.4.4
       env: TEST_VAGRANT_VERSION=v2.2.2 BUNDLER_VERSION=1.16.1
     - rvm: 2.4.4
