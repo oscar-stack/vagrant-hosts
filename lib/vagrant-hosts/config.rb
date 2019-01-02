@@ -41,6 +41,15 @@ module VagrantHosts
     #   @since 2.7.0
     attr_accessor :imports
 
+    # @!attribute [rw] change_hostname
+    #   @return [TrueClass, FalseClass] When set to true, running the hosts
+    #   provisioner on this VM will change the hostname of the machine to be
+    #   the hostname configured or the name of the machine.
+    #   Defaults to 'true'.
+    #
+    #   @since 2.8.4
+    attr_accessor :change_hostname
+
     def initialize
       @hosts = []
       @exports = {}
@@ -48,6 +57,7 @@ module VagrantHosts
       @autoconfigure = UNSET_VALUE
       @add_localhost_hostnames = UNSET_VALUE
       @sync_hosts = UNSET_VALUE
+      @change_hostname = UNSET_VALUE
     end
 
     # Register a host for entry
@@ -81,6 +91,7 @@ module VagrantHosts
       end
 
       @sync_hosts = false if @sync_hosts == UNSET_VALUE
+      @change_hostname = true if @change_hostname == UNSET_VALUE
     end
 
     # @param other [VagrantHosts::Config]
