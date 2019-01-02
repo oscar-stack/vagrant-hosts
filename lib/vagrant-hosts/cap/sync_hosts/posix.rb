@@ -1,7 +1,8 @@
-# Provide a base class for syncing hosts entries on POSIX systems.
-
 require 'tempfile'
 
+# Guest capability for syncing /etc/hosts on POSIX systems
+#
+# @since 2.0.0
 class VagrantHosts::Cap::SyncHosts::POSIX < VagrantHosts::Cap::SyncHosts::Base
 
   private
@@ -37,5 +38,4 @@ class VagrantHosts::Cap::SyncHosts::POSIX < VagrantHosts::Cap::SyncHosts::Base
       str << "#{address} #{aliases.join(' ')}\n"
     end
   end
-
 end

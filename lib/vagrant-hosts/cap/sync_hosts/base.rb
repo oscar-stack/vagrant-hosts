@@ -1,7 +1,10 @@
-# Provide an abstract base class for syncing hosts entries
-class VagrantHosts::Cap::SyncHosts::Base
+require 'vagrant-hosts/addresses'
 
-  require 'vagrant-hosts/addresses'
+# Abstract guest capability for syncing host resources
+#
+# @abstract
+# @since 2.0.0
+class VagrantHosts::Cap::SyncHosts::Base
   include VagrantHosts::Addresses
 
   def self.sync_hosts(machine, config)
@@ -25,11 +28,17 @@ class VagrantHosts::Cap::SyncHosts::Base
       change_host_name(hostname)
     end
 
-    # call to method not implemented by abstract base class
     update_hosts
   end
 
   private
+
+  # Update the hosts file on a machine
+  #
+  # Subclasses should implement this method with OS-specific logic.
+  def update_hosts
+    raise NotImplementedError
+  end
 
   # @param name [String] The new hostname to apply on the guest
   def change_host_name(name)
@@ -40,5 +49,4 @@ class VagrantHosts::Cap::SyncHosts::Base
       @machine.guest.capability(:change_host_name, name)
     end
   end
-
 end

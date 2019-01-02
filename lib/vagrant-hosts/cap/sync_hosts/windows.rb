@@ -1,5 +1,9 @@
-# Provide a base class for syncing hosts entries on Windows systems.
+# Guest capability for updating System32/drivers/etc/hosts on Windows
+#
+# @since 2.0.0
 class VagrantHosts::Cap::SyncHosts::Windows < VagrantHosts::Cap::SyncHosts::Base
+
+  private
 
   def update_hosts
     host_entries = []
@@ -80,5 +84,4 @@ if ($success -eq $True) {exit 0} else {exit 1}
 
     @machine.communicate.sudo(powershell)
   end
-
 end
