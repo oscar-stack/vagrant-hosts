@@ -33,6 +33,20 @@ class VagrantHosts::Cap::SyncHosts::Base
 
   private
 
+  # Upload /etc/hosts content to a temporary file on the guest
+  def upload_temphosts(hosts_content, dest_path = '/tmp/vagrant-hosts.txt')
+    temp_file = nil
+
+    temp_file = Tempfile.new('vagrant-hosts')
+    temp_file.binmode # Don't convert line endings.
+
+    temp_file.write(hosts_content)
+    temp_file.flush
+    @machine.communicate.upload(temp_file.path, dest_path)
+  ensure
+    temp_file.close unless temp_file.nil?
+  end
+
   # Update the hosts file on a machine
   #
   # Subclasses should implement this method with OS-specific logic.

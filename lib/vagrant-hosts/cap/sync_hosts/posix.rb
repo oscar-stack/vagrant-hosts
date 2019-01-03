@@ -7,15 +7,9 @@ class VagrantHosts::Cap::SyncHosts::POSIX < VagrantHosts::Cap::SyncHosts::Base
 
   private
 
-  def upload_tmphosts
-    cache = Tempfile.new('tmp-hosts')
-    cache.write(format_hosts)
-    cache.flush
-    @machine.communicate.upload(cache.path, '/tmp/hosts')
-  end
-
   def update_hosts
-    upload_tmphosts
+    hosts_content = format_hosts
+    upload_temphosts(hosts_content, '/tmp/vagrant-hosts.txt')
 
     # Switch to PTY mode as this provider may execute across multiple machines
     # which may not have requiretty set to false (i.e. because they're still
@@ -25,7 +19,10 @@ class VagrantHosts::Cap::SyncHosts::POSIX < VagrantHosts::Cap::SyncHosts::Base
     old_pty_setting = @machine.config.ssh.pty
     @machine.config.ssh.pty = true
 
-    @machine.communicate.sudo('cat /tmp/hosts > /etc/hosts')
+    # NOTE: cat is used here instead of mv to work around issues with
+    #       Docker filesystem layers not allowing the creation of a
+    #       new file.
+    @machine.communicate.sudo('cat /tmp/vagrant-hosts.txt > /etc/hosts')
   ensure
     @machine.config.ssh.pty = old_pty_setting
   end
