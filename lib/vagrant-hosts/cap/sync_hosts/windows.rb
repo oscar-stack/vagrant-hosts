@@ -1,26 +1,39 @@
 # Guest capability for updating System32/drivers/etc/hosts on Windows
 #
+# @see https://docs.microsoft.com/en-us/previous-versions//bb727005(v=technet.10)#EDAA
+#   Microsoft docs on hostname resolution.
 # @since 2.0.0
 class VagrantHosts::Cap::SyncHosts::Windows < VagrantHosts::Cap::SyncHosts::Base
 
   private
 
   def update_hosts
-    host_entries = []
-    all_hosts(@config).each do |(address, aliases)|
-      aliases.each do |name|
-        host_entries << "#{address} #{name}"
+    hosts_content = format_hosts
+    temp_file = [get_tempdir, 'vagrant-hosts.txt'].join('/')
+    upload_temphosts(hosts_content, temp_file)
+
+    @machine.communicate.sudo(<<-EOS)
+Copy-Item `
+  -Path "#{temp_file}" `
+  -Destination "${Env:WINDIR}/System32/drivers/etc/hosts"
+EOS
+  end
+
+  # Return the path of the Windows temporary directory
+  def get_tempdir
+    sudo('Write-Host -Object $Env:TEMP')[:stdout].chomp.gsub("\\", '/')
+  end
+
+  def format_hosts
+    all_hosts(@config).inject('') do |str, (address, aliases)|
+      # Unlike UNIXy systems, Windows limits the number of host aliases
+      # that can appear on a line to 9.
+      aliases.each_slice(9) do |slice|
+        str << "#{address} #{slice.join(' ')}\r\n"
       end
+
+      str
     end
-
-    script = []
-    script << '$HostsPath = "$env:windir\\System32\\drivers\\etc\\hosts"'
-    script << '$Hosts = gc $HostsPath'
-
-    host_defs = "'" + host_entries.join('\', \'') + "'"
-    script << "@(#{host_defs}) | % { if (\$Hosts -notcontains \$_) { Add-Content -Path \$HostsPath -Value \$_ }}"
-
-    @machine.communicate.sudo(script.join("; "))
   end
 
   # Windows needs a modification of the base method because Windows guest names
@@ -83,5 +96,21 @@ if ($success -eq $True) {exit 0} else {exit 1}
     END_OF_POWERSHELL
 
     @machine.communicate.sudo(powershell)
+  end
+
+  # FIXME: de-duplicate with the facts implementation.
+  def sudo(cmd)
+    stdout = ''
+    stderr = ''
+
+    retval = @machine.communicate.sudo(cmd) do |type, data|
+      if type == :stderr
+        stderr << data
+      else
+        stdout << data
+      end
+    end
+
+    {:stdout => stdout, :stderr => stderr, :retval => retval}
   end
 end
