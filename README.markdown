@@ -38,6 +38,9 @@ behaviors of each provisioner instance.
   * `add_localhost_hostnames`
     * Description: A boolean which controls whether the hostname of the machine is added as an alias for `127.0.1.1`
     * Default: `true`
+  * `change_hostname`
+    * Description: A boolean which controls whether the hostname of the machine will be set during provisioning.
+    * Default: `true`
   * `sync_hosts`
     * Description: A boolean which controls whether running the hosts provisioner causes an update on all other running machines.
       This also happens during machine destruction.

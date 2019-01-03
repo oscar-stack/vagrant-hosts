@@ -47,7 +47,7 @@ module VagrantHosts
     #   the hostname configured or the name of the machine.
     #   Defaults to 'true'.
     #
-    #   @since 2.8.4
+    #   @since 2.9.0
     attr_accessor :change_hostname
 
     def initialize

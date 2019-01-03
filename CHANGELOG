@@ -1,6 +1,25 @@
 CHANGELOG
 =========
 
+2.9.0
+-----
+
+2019-01-03
+
+This is a backwards compatible feature and bugfix release.
+
+### Added
+
+  * New `change_hostname` config setting that controls whether the provisioner
+    will attempt to set the hostname of the VM.
+
+### Fixed
+
+  * Hostnames can now be removed from Windows VMs.
+
+  * Provisioning hostnames on Windows VMs will no longer fail when a large
+    number of names is added.
+
 2.8.2
 -----
 
