@@ -22,6 +22,6 @@ Gem::Specification.new do |gem|
   gem.require_path = 'lib'
 
   # Pinned for compatibility with vagrant-spec.
-  gem.add_development_dependency 'rake', '~> 10.0'
+  gem.add_development_dependency 'rake', '~> 12.0'
   gem.add_development_dependency 'rspec', '~> 2.14.0'
 end
